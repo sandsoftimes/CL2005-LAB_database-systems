@@ -1,0 +1,526 @@
+
+@@@@USER CREATION
+
+MariaDB [(none)]> create user 'shade'@'localhost' identified by 'hade';
+Query OK, 0 rows affected (0.012 sec)
+
+
+@@@@
+
+MariaDB [(none)]> select host,user,password from mysql.user;
++-----------+-------------+-------------------------------------------+
+| Host      | User        | Password                                  |
++-----------+-------------+-------------------------------------------+
+| localhost | root        |                                           |
+| 127.0.0.1 | root        |                                           |
+| ::1       | root        |                                           |
+| localhost |             |                                           |
+| localhost | pma         |                                           |
+| localhost | mariadb.sys |                                           |
+| localhost | shade       | *1902EB62AB1806233FA834DBBCABFB340D7B8721 |
++-----------+-------------+-------------------------------------------+
+7 rows in set (0.040 sec)
+
+
+@@@@ Entering The New User
+
+sudo /opt/lampp/bin/mysql -u shade -p;
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 12
+Server version: 10.4.24-MariaDB Source distribution
+
+
+@@@@ Testing the available Databases
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| test               |
+| test_new           |
++--------------------+
+3 rows in set (0.005 sec)
+
+
+@@@@
+
+MariaDB [(none)]> grant select,update on lab_2.EMPLOYEE to 'shade'@'localhost';
+Query OK, 0 rows affected (0.005 sec)
+
+
+@@@@
+
+ariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| lab_2              |
+| test               |
+| test_new           |
++--------------------+
+4 rows in set (0.001 sec)
+
+
+@@@@
+
+
+MariaDB [(none)]> use lab_2;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+
+
+@@@@
+
+MariaDB [lab_2]> show tables;
++-----------------+
+| Tables_in_lab_2 |
++-----------------+
+| EMPLOYEE        |
++-----------------+
+1 row in set (0.001 sec)
+
+
+@@@@
+
+MariaDB [lab_2]> select * from EMPLOYEE;
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+| EMP_NUM | EMP_TITLE | EMP_LNAME  | EMP_FNAME | EMP_DOB    | EMP_HIRE_DATE | EMP_AREA_CODE | EMP_PHONE | PARK_CODE |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+|     100 | Ms        | Calderdale | Emma      | 1972-06-15 | 1992-03-15    | 0181          | 324-9652  | FR1001    |
+|     101 | Ms        | Ricardo    | Marshel   | 1978-03-19 | 1996-04-25    | 0181          | 324-4472  | UK3452    |
+|     102 | Mr        | Arshad     | Arif      | 1969-11-14 | 1990-12-20    | 7253          | 675-8993  | FR1001    |
+|     103 | Ms        | Roberts    | Anne      | 1974-10-16 | 1994-08-16    | 0181          | 898-3456  | UK3452    |
+|     104 | Mr        | Denver     | Enrica    | 1980-11-08 | 2001-10-20    | 7253          | 504-4434  | ZA1342    |
+|     105 | Ms        | Namowa     | Mirrelle  | 1990-03-14 | 2006-11-08    | 0181          | 890-3243  | FR1001    |
+|     106 | Mrs       | Smith      | Gemma     | 1968-02-12 | 1989-01-05    | 0181          | 324-7845  | ZA1342    |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+7 rows in set (0.001 sec)
+
+
+@@@@ 2 View
+
+MariaDB [(none)]> grant select on lab_2.EMPFR to 'shade'@'localhost';
+Query OK, 0 rows affected (0.005 sec)
+
+MariaDB [lab_2]> select * from EMPFR;
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+| EMP_NUM | EMP_TITLE | EMP_LNAME  | EMP_FNAME | EMP_DOB    | EMP_HIRE_DATE | EMP_AREA_CODE | EMP_PHONE | PARK_CODE |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+|     100 | Ms        | Calderdale | Emma      | 1972-06-15 | 1992-03-15    | 0181          | 324-9652  | FR1001    |
+|     102 | Mr        | Arshad     | Arif      | 1969-11-14 | 1990-12-20    | 7253          | 675-8993  | FR1001    |
+|     105 | Ms        | Namowa     | Mirrelle  | 1990-03-14 | 2006-11-08    | 0181          | 890-3243  | FR1001    |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+3 rows in set (0.002 sec)
+
+
+@@@@ 3 Company Access
+
+
+MariaDB [(none)]> grant All on company.* to 'shade'@'localhost';
+Query OK, 0 rows affected (0.013 sec)
+
+
+MariaDB [lab_2]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| company            |
+| information_schema |
+| lab_2              |
+| test               |
+| test_new           |
++--------------------+
+5 rows in set (0.001 sec)
+
+
+MariaDB [company]> show tables;
++-------------------+
+| Tables_in_company |
++-------------------+
+| dept              |
+| emp               |
+| salgrade          |
++-------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [company]> select * from dept;
++--------+------------+----------+
+| deptno | dname      | location |
++--------+------------+----------+
+|     10 | Accounting | New York |
+|     20 | Research   | Dallas   |
+|     30 | Sales      | Chicago  |
+|     40 | Operations | Boston   |
++--------+------------+----------+
+4 rows in set (0.001 sec)
+
+@@@@ 4 Create Database
+
+MariaDB [(none)]> grant create on *.* to 'shade'@'localhost';
+Query OK, 0 rows affected (0.010 sec)
+
+MariaDB [(none)]> create database newworld;
+Query OK, 1 row affected (0.002 sec)
+
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| 20p_0101           |
+| bcs_15             |
+| bcs_16             |
+| bcs_5b             |
+| bcs_lab2           |
+| company            |
+| information_schema |
+| lab_2              |
+| mysql              |
+| mytest             |
+| newworld           |
+| performance_schema |
+| person             |
+| phpmyadmin         |
+| sales_co           |
+| test               |
+| test_new           |
+| testx              |
+| themepark          |
+| wordypress         |
++--------------------+
+20 rows in set (0.001 sec)
+
+@@@@ 3 Revoke View
+
+MariaDB [(none)]> revoke select on lab_2.EMPFR from 'shade'@'localhost'; 
+Query OK, 0 rows affected (0.019 sec)
+
+MariaDB [(none)]> use lab_2;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+
+
+@@@@ 4 COMMIT
+
+MariaDB [(none)]> set autocommit=0;
+Query OK, 0 rows affected (0.000 sec)
+	
+
+MariaDB [lab_2]> insert into THEMEPARK values ('FR2002','Haseinburg','Lille','FR');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| FR2002    | Haseinburg    | Lille        | FR           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+13 rows in set (0.001 sec)
+
+MariaDB [lab_2]> insert into THEMEPARK values ('FR2002','Haseinburg','Lille','FR');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| FR2002    | Haseinburg    | Lille        | FR           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+13 rows in set (0.001 sec)
+
+MariaDB [lab_2]> insert into THEMEPARK values ('FR2005','Laseinburg','Lille','FR');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| FR2002    | Haseinburg    | Lille        | FR           |
+| FR2005    | Laseinburg    | Lille        | FR           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+14 rows in set (0.001 sec)
+
+AFTER ROLL BACK###################################################################
+
+MariaDB [lab_2]> rollback;
+Query OK, 0 rows affected (0.014 sec)
+
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+12 rows in set (0.001 sec)
+
+insert into THEMEPARK values ('AU1001','SkiWorld','AU','UK');
+insert into THEMEPARK values ('GR5001','RoboLand','GR','SP');
+insert into THEMEPARK values ('FR2002','Haseinburg','Lille','FR');
+insert into THEMEPARK values ('FR2005','Laseinburg','Lille','FR');
+
+MariaDB [lab_2]> insert into THEMEPARK values ('GR5001','RoboLand','GR','SP');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> insert into THEMEPARK values ('AU1001','SkiWorld','AU','UK');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| AU1001    | SkiWorld      | AU           | UK           |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| GR5001    | RoboLand      | GR           | SP           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+14 rows in set (0.001 sec)
+
+MariaDB [lab_2]> insert into THEMEPARK values ('FR2005','Laseinburg','Lille','FR');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> insert into THEMEPARK values ('FR2002','Haseinburg','Lille','FR');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| AU1001    | SkiWorld      | AU           | UK           |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| FR2002    | Haseinburg    | Lille        | FR           |
+| FR2005    | Laseinburg    | Lille        | FR           |
+| GR5001    | RoboLand      | GR           | SP           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+16 rows in set (0.001 sec)
+
+MariaDB [lab_2]> update THEMEPARK set PARK_CITY='PARIS' where PARK_CODE='FR2002';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| AU1001    | SkiWorld      | AU           | UK           |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| FR2002    | Haseinburg    | PARIS        | FR           |
+| FR2005    | Laseinburg    | Lille        | FR           |
+| GR5001    | RoboLand      | GR           | SP           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+16 rows in set (0.001 sec)
+
+MariaDB [lab_2]> update THEMEPARK set PARK_CITY='Hamberg' where PARK_CODE='FR2005';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| AU1001    | SkiWorld      | AU           | UK           |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| FR2002    | Haseinburg    | PARIS        | FR           |
+| FR2005    | Laseinburg    | Hamberg      | FR           |
+| GR5001    | RoboLand      | GR           | SP           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+16 rows in set (0.001 sec)
+
+MariaDB [lab_2]> 
+
+MariaDB [lab_2]> delete from THEMEPARK where PARK_CODE='FR2002';
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| AU1001    | SkiWorld      | AU           | UK           |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| FR2005    | Laseinburg    | Hamberg      | FR           |
+| GR5001    | RoboLand      | GR           | SP           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+15 rows in set (0.001 sec)
+
+@@@@@@
+
+MariaDB [lab_2]> savepoint happy;
+Query OK, 0 rows affected (0.000 sec)
+
+@@@@@
+
+
+MariaDB [lab_2]> insert into THEMEPARK values ('GR2008','Kaseinburg','Berlin','GR');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> insert into THEMEPARK values ('GR2009','Kaseinburg','Munich','GR');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> insert into THEMEPARK values ('GR2010','Kaseinburg','Dortmund','GR');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| AU1001    | SkiWorld      | AU           | UK           |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| FR2005    | Laseinburg    | Hamberg      | FR           |
+| GR2008    | Kaseinburg    | Berlin       | GR           |
+| GR2009    | Kaseinburg    | Munich       | GR           |
+| GR2010    | Kaseinburg    | Dortmund     | GR           |
+| GR5001    | RoboLand      | GR           | SP           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+18 rows in set (0.001 sec)
+
+@@@@
+
+MariaDB [lab_2]> rollback to happy;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [lab_2]> select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+|           |               |              |              |
+| AU1001    | SkiWorld      | AU           | UK           |
+| FR1001    | FairyLand     | PARIS        | FR           |
+| FR2005    | Laseinburg    | Hamberg      | FR           |
+| GR5001    | RoboLand      | GR           | SP           |
+| NL1202    | Efling        | NOORD        | NL           |
+| pk9       | frankis       | peshawar     | fr           |
+| PK9749    | Frankstein    | Lille        | FR           |
+| PK9780    | Frankstein    | Lille        | FR           |
+| pk9997    | PKR           | Paris        | FR           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+15 rows in set (0.001 sec)
+
+
+
+
+
+

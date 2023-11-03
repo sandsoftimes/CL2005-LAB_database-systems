@@ -1,0 +1,214 @@
+NAME:Muhammad Sherjeel Akhtar
+Roll No:20p-0101
+Subject:Database Lab
+Section:5A
+----------------------------------------------------------
+
+Query 2 !!!
+
+MariaDB [sailors_club]> select sailor.id,sailor.name,boat.colour from sailor join reservation on sailor.id=reservation.sid join boat on reservation.bid=boat.id where boat.colour='red';
++----+--------+--------+
+| id | name   | colour |
++----+--------+--------+
+| 31 | Lubber | red    |
+| 31 | Lubber | red    |
+| 59 | Smith  | red    |
+| 59 | Smith  | red    |
+| 59 | Smith  | red    |
++----+--------+--------+
+5 rows in set (0.001 sec)
+
+OR
+
+MariaDB [sailors_club]> select sailor.id,sailor.name,boat.colour from sailor join reservation on sailor.id=reservation.sid join boat on reservation.bid=boat.id where boat.colour='red' group by sailor.name;
++----+--------+--------+
+| id | name   | colour |
++----+--------+--------+
+| 31 | Lubber | red    |
+| 59 | Smith  | red    |
++----+--------+--------+
+2 rows in set (0.001 sec)
+
+Query 4 !!!
+
+MariaDB [sailors_club]> select name,count(bid) from boat join reservation on boat.id=reservation.bid group by name order by count(bid) desc limit 1;
++-----------+------------+
+| name      | count(bid) |
++-----------+------------+
+| Interlake |          7 |
++-----------+------------+
+1 row in set (0.001 sec)
+
+Query 5 !!!
+
+MariaDB [sailors_club]> select name,id from sailor join reservation on sailor.id=reservation.sid where reservation.sid not in (select sid from reservation); 
+Empty set (0.001 sec)
+
+Query 6 !!!
+
+MariaDB [sailors_club]> select name from boat;
++------------+
+| name       |
++------------+
+| Interlake  |
+| Interlake  |
+| Clipper    |
+| Marine     |
+| Sub Marine |
++------------+
+5 rows in set (0.000 sec)
+
+MariaDB [sailors_club]> select name from boat where colour='red';
++-----------+
+| name      |
++-----------+
+| Interlake |
+| Marine    |
++-----------+
+2 rows in set (0.001 sec)
+
+MariaDB [sailors_club]> create view REDCOLOUR as select name from boat where colour='red';
+Query OK, 0 rows affected (0.013 sec)
+
+MariaDB [sailors_club]> select * from REDCOLOUR;
++-----------+
+| name      |
++-----------+
+| Interlake |
+| Marine    |
++-----------+
+2 rows in set (0.001 sec)
+
+Query 7 !!!
+
+MariaDB [sailors_club]> select boat.name,boat.colour from sailor join reservation on sailor.id=reservation.sid join boat on boat.id=reservation.bid where sailor.rating=8 and boat.colour='red';
++-----------+--------+
+| name      | colour |
++-----------+--------+
+| Interlake | red    |
+| Marine    | red    |
++-----------+--------+
+2 rows in set (0.001 sec)
+
+MariaDB [sailors_club]> select boat.name,boat.colour,sailor.rating from sailor join reservation on sailor.id=reservation.sid join boat on boat.id=reservation.bid where sailor.rating=8 and boat.colour='red';
++-----------+--------+--------+
+| name      | colour | rating |
++-----------+--------+--------+
+| Interlake | red    |      8 |
+| Marine    | red    |      8 |
++-----------+--------+--------+
+2 rows in set (0.001 sec)
+
+Query 8 !!!
+
+MariaDB [sailors_club]> select boat.name,boat.colour,sailor.rating from sailor join reservation on sailor.id=reservation.sid join boat on boat.id=reservation.bid where sailor.rating not in (8) and boat.colour='red';
++-----------+--------+--------+
+| name      | colour | rating |
++-----------+--------+--------+
+| Interlake | red    |      9 |
+| Interlake | red    |      9 |
+| Marine    | red    |      9 |
++-----------+--------+--------+
+3 rows in set (0.001 sec)
+
+
+Query 9 !!!
+
+MariaDB [sailors_club]> select boat.colour,count(colour) from boat where colour='red' group by colour;
++--------+---------------+
+| colour | count(colour) |
++--------+---------------+
+| red    |             2 |
++--------+---------------+
+1 row in set (0.001 sec)
+
+Query 10 !!!
+
+MariaDB [sailors_club]> select boat.name,sailor.rating,boat.colour,boat.id from sailor join reservation on sailor.id=reservation.sid join boat on reservation.bid=boat.id where sailor.rating=8 and boat.colour='red' and reservation.bid not in (select bid from reservation);
+Empty set (0.001 sec)
+
+Query 11 !!!
+
+MariaDB [sailors_club]> select name,id,count(sid) from sailor join reservation on sailor.id=reservation.sid group by id; 
++--------+----+------------+
+| name   | id | count(sid) |
++--------+----+------------+
+| Dustin | 22 |          3 |
+| Lubber | 31 |          4 |
+| Rusty  | 58 |          2 |
+| Smith  | 59 |          3 |
++--------+----+------------+
+4 rows in set (0.001 sec)
+
+Query 12 !!!
+
+MariaDB [sailors_club]> select id,name,count(sid) from boat join reservation on boat.id=reservation.bid group by bid having count(sid)>2;
++-----+-----------+------------+
+| id  | name      | count(sid) |
++-----+-----------+------------+
+| 101 | Interlake |          4 |
+| 102 | Interlake |          3 |
+| 103 | Clipper   |          3 |
++-----+-----------+------------+
+3 rows in set (0.001 sec)
+
+Query 15 !!!
+
+MariaDB [sailors_club]> select concat('The ',name,' id is ',id,' has',' ',colour,'colour')  from boat;
++-------------------------------------------------------------+
+| concat('The ',name,' id is ',id,' has',' ',colour,'colour') |
++-------------------------------------------------------------+
+| The Interlake id is 101 has bluecolour                      |
+| The Interlake id is 102 has redcolour                       |
+| The Clipper id is 103 has greencolour                       |
+| The Marine id is 104 has redcolour                          |
+| The Sub Marine id is 108 has orangecolour                   |
++-------------------------------------------------------------+
+5 rows in set (0.001 sec)
+
+Query 2 !!!
+
+MariaDB [sailors_club]> select count(sailor.name),sailor.name,boat.colour,reservation.sid,reservation.bid from sailor join reservation on sailor.id=reservation.sid join boat on boat.id=reservation.bid group by colour,sid,sailor.name order by name desc limit 1;
++--------------------+-------+--------+-----+-----+
+| count(sailor.name) | name  | colour | sid | bid |
++--------------------+-------+--------+-----+-----+
+|                  3 | Smith | red    |  59 | 102 |
++--------------------+-------+--------+-----+-----+
+1 row in set (0.001 sec)
+
+Query 1 !!!
+
+
+MariaDB [sailors_club]> select count(bid)as 'No Of Times Reserved',id,name from boat join reservation on boat.id=reservation.bid group by id,name; 
++----------------------+-----+-----------+
+| No Of Times Reserved | id  | name      |
++----------------------+-----+-----------+
+|                    4 | 101 | Interlake |
+|                    3 | 102 | Interlake |
+|                    3 | 103 | Clipper   |
+|                    2 | 104 | Marine    |
++----------------------+-----+-----------+
+4 rows in set (0.001 sec)
+
+Query 14 !!!
+
+MariaDB [sailors_club]> SELECT name,CONCAT(UPPER(SUBSTR(name,1,3)),UPPER(SUBSTR(age,1,2)),UPPER(SUBSTR(rating,1,3))) AS PASSWORD FROM sailor;
++--------+----------+
+| name   | PASSWORD |
++--------+----------+
+| Dustin | DUS457   |
+| Lubber | LUB668   |
+| Rusty  | RUS3510  |
+| Smith  | SMI419   |
++--------+----------+
+4 rows in set (0.001 sec)
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,219 @@
++++##################Pre-Practice###############################
+MariaDB [lab_2]> SELECT TICKET_NO, TICKET_TYPE, TICKET_PRICE
+    -> FROM TICKET
+    -> WHERE TICKET_PRICE >= (SELECT AVG(TICKET_PRICE) FROM TICKET);
++-----------+-------------+--------------+
+| TICKET_NO | TICKET_TYPE | TICKET_PRICE |
++-----------+-------------+--------------+
+|     11001 | Adult       |        24.99 |
+|     13002 | Adult       |        34.99 |
+|     67833 | Adult       |        28.67 |
+|     88567 | Child       |        22.50 |
+|     88568 | Adult       |        42.10 |
++-----------+-------------+--------------+
+5 rows in set (0.001 sec)
+
+####HAVING
+
+MariaDB [lab_2]> SELECT PARK_CODE, SUM(LINE_QTY)
+    -> FROM SALES_LINE NATURAL JOIN TICKET
+    -> GROUP BY PARK_CODE
+    -> HAVING SUM(LINE_QTY) > (SELECT AVG(LINE_QTY) FROM SALES_LINE);
++-----------+---------------+
+| PARK_CODE | SUM(LINE_QTY) |
++-----------+---------------+
+| FR1001    |            14 |
+| UK3452    |            29 |
+| ZA1342    |            18 |
++-----------+---------------+
+3 rows in set (0.002 sec)
+
+######ALL OPERATOR
+
+MariaDB [lab_2]> SELECT TICKET_NO, PARK_CODE, TICKET_PRICE
+    -> FROM TICKET
+    -> WHERE TICKET_PRICE > ALL (SELECT TICKET_PRICE FROM TICKET
+    -> WHERE TICKET_TYPE = 'CHILD');
++-----------+-----------+--------------+
+| TICKET_NO | PARK_CODE | TICKET_PRICE |
++-----------+-----------+--------------+
+|     11001 | SP4533    |        24.99 |
+|     13002 | FR1001    |        34.99 |
+|     67833 | ZA1342    |        28.67 |
+|     88568 | UK3452    |        42.10 |
++-----------+-----------+--------------+
+4 rows in set (0.001 sec)
+
+#####ATTRIBUTE LIST SUBQUERY
+
+MariaDB [lab_2]> SELECT TICKET_NO, TICKET_PRICE,
+    -> (SELECT AVG(TICKET_PRICE) FROM TICKET) AS AVGPRICE,
+    -> TICKET_PRICE - (SELECT AVG(TICKET_PRICE) FROM TICKET) AS DIFF
+    -> FROM TICKET;
++-----------+--------------+-----------+------------+
+| TICKET_NO | TICKET_PRICE | AVGPRICE  | DIFF       |
++-----------+--------------+-----------+------------+
+|     11001 |        24.99 | 21.740000 |   3.250000 |
+|     11002 |        14.99 | 21.740000 |  -6.750000 |
+|     11003 |        10.99 | 21.740000 | -10.750000 |
+|     13001 |        18.99 | 21.740000 |  -2.750000 |
+|     13002 |        34.99 | 21.740000 |  13.250000 |
+|     13003 |        20.99 | 21.740000 |  -0.750000 |
+|     67832 |        18.56 | 21.740000 |  -3.180000 |
+|     67833 |        28.67 | 21.740000 |   6.930000 |
+|     67855 |        12.12 | 21.740000 |  -9.620000 |
+|     88567 |        22.50 | 21.740000 |   0.760000 |
+|     88568 |        42.10 | 21.740000 |  20.360000 |
+|     89720 |        10.99 | 21.740000 | -10.750000 |
++-----------+--------------+-----------+------------+
+12 rows in set (0.001 sec)
+
+####CORELATED SUBQUERIES
+
+SELECT TRANSACTION_NO, LINE_NO, LINE_QTY, LINE_PRICE
+FROM SALES_LINE SL
+WHERE SL.LINE_QTY > (SELECT AVG(LINE_QTY)
+FROM SALES_LINE SA
+WHERE SA. TRANSACTION_NO = SL. TRANSACTION_NO);
+
+
+
+
+Q 1:
+
+SELECT ename , salary
+    -> FROM emp
+    -> WHERE salary = (select MAX(salary)
+    -> FROM emp)
+    -> ;
++-------+--------+
+| ename | salary |
++-------+--------+
+| King  |   6500 |
++-------+--------+
+1 row in set (0.000 sec)
+
+Q 2:
+
+ SELECT emp.ename
+    -> FROM emp
+    -> WHERE deptno = (SELECT deptno WHERE deptno = "30");
++--------+
+| ename  |
++--------+
+| Allen  |
+| Ward   |
+| Martin |
+| Blake  |
+| Turner |
+| James  |
++--------+
+6 rows in set (0.002 sec)
+
+
+
+Q 3:
+
+ SELECT emp.ename
+    -> FROM emp
+    -> WHERE deptno = (SELECT deptno FROM dept WHERE location = "New York");
++--------+
+| ename  |
++--------+
+| Clark  |
+| King   |
+| Miller |
++--------+
+3 rows in set (0.012 sec)
+
+
+
+Q 4:
+
+ SELECT COUNT(ename) FROM emp WHERE deptno = "30";
++--------------+
+| COUNT(ename) |
++--------------+
+|            6 |
++--------------+
+1 row in set (0.000 sec)
+
+
+Q 5:
+
+SELECT ename FROM emp
+    -> WHERE salary > (select MAX(salary) from emp WHERE deptno = "30");
++-------+
+| ename |
++-------+
+| Jones |
+| Scott |
+| King  |
+| Ford  |
++-------+
+4 rows in set (0.000 sec)
+
+
+
+Q 6:
+
+
+ SELECT ename FROM emp
+    -> WHERE salary > (select MIN(salary) from emp WHERE deptno = "30");
++--------+
+| ename  |
++--------+
+| Allen  |
+| Ward   |
+| Jones  |
+| Martin |
+| Blake  |
+| Clark  |
+| Scott  |
+| David  |
+| King   |
+| Turner |
+| Adams  |
+| Ford   |
+| Miller |
++--------+
+13 rows in set (0.000 sec)
+
+
+
+Q 7:
+
+ SELECT * FROM dept
+    -> WHERE deptno NOT IN (SELECT deptno FROM emp);
++--------+------------+----------+
+| deptno | dname      | location |
++--------+------------+----------+
+|     40 | Operations | Boston   |
++--------+------------+----------+
+1 row in set (0.009 sec)
+
+
+
+
+Q 8:
+
+ SELECT ename , deptno
+    -> FROM emp SL
+    -> WHERE SL.salary > (SELECT AVG(salary)
+    -> FROM emp SA
+    -> WHERE SA.deptno = SL.deptno);
++-------+--------+
+| ename | deptno |
++-------+--------+
+| Allen |     30 |
+| Jones |     20 |
+| Blake |     30 |
+| Scott |     20 |
+| King  |     10 |
+| Ford  |     20 |
++-------+--------+
+6 rows in set (0.001 sec)
+
+
+
+

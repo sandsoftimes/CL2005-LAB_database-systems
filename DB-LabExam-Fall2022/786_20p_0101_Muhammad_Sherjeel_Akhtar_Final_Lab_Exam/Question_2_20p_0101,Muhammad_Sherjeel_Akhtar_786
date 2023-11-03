@@ -1,0 +1,100 @@
+NAME:Muhammad Sherjeel Akhtar
+Roll No:20p-0101
+Subject:Database Lab
+Section:5A
+----------------------------------------------------------
+MONGOOOOO
+
+Query 1:
+
+
+20p_0101s> db.movie.find({year:{$gt:1965},year:{$lt:1970}},{tile:1,year:1,rated:1})
+[
+  {
+    _id: ObjectId("573a1395f29313caabce2ac7"),
+    rated: 'NOT RATED',
+    year: 1966
+  },
+  {
+    _id: ObjectId("573a1394f29313caabcdf1ad"),
+    year: 1952,
+    rated: 'NOT RATED'
+  },
+  {
+    _id: ObjectId("573a1391f29313caabcd7e30"),
+    rated: 'UNRATED',
+    year: 1925
+  }
+]
+
+
+
+
+Query 2:
+
+20p_0101s> db.movie.find({runtime:{$gt:180}})
+[
+  {
+    _id: ObjectId("573a1395f29313caabce2ac7"),
+    plot: 'The life, times and afflictions of the fifteenth-century Russian iconographer.',
+    genres: [ 'Biography', 'Drama', 'History' ],
+    runtime: 205,
+    rated: 'NOT RATED',
+    title: 'Andrei Rublev',
+    num_mflix_comments: 1,
+    countries: [ 'Soviet Union' ],
+    languages: [ 'Russian', 'Italian', 'Tatar' ],
+    directors: [ 'Andrei Tarkovsky' ],
+    year: 1966,
+    imdb: { rating: 8.4, votes: 21476, id: 60107 },
+    type: 'movie',
+    metacritic: 76
+  }
+]
+
+
+20p_0101s> db.movie.find({runtime:{$gt:180}},{"imdb.rating":8})
+[
+  { _id: ObjectId("573a1395f29313caabce2ac7"), imdb: { rating: 8.4 } }
+]
+
+
+20p_0101s> db.movie.find({runtime:{$gt:180}})
+[
+  {
+    _id: ObjectId("573a1395f29313caabce2ac7"),
+    plot: 'The life, times and afflictions of the fifteenth-century Russian iconographer.',
+    genres: [ 'Biography', 'Drama', 'History' ],
+    runtime: 205,
+    rated: 'NOT RATED',
+    title: 'Andrei Rublev',
+    num_mflix_comments: 1,
+    countries: [ 'Soviet Union' ],
+    languages: [ 'Russian', 'Italian', 'Tatar' ],
+    directors: [ 'Andrei Tarkovsky' ],
+    year: 1966,
+    imdb: { rating: 8.4, votes: 21476, id: 60107 },
+    type: 'movie',
+    metacritic: 76
+  }
+]
+
+
+Query 3:
+
+20p_0101s> db.movie.find({genres:["Sport,Talk-Show,News"]}) ;
+
+
+
+
+Query 4:
+
+20p_0101s> db.movie.find({"imbd.rating":{$gt:8.5}},{metacritic:{$gt:8.5}}) ;
+
+Query 5:
+
+
+20p_0101s> db.movie.find({genres:["History,War"]},{id:1,runtime:1})
+
+Above is Query 5
+

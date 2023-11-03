@@ -1,0 +1,12 @@
+<?php
+while($row=$query_2->fetch(PDO::FETCH_OBJ)){
+
+    echo "<tr> 
+    <td>$row->PARK_CODE</td>
+    <td>$row->PARK_NAME</td>
+    <td>$row->PARK_CITY</td>
+    <td>$row->PARK_COUNTRY</td>
+    </tr>";
+}
+
+?>

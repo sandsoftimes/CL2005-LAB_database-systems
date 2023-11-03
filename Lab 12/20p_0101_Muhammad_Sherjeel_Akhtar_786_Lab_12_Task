@@ -1,0 +1,286 @@
+------------------------------------------------------------------------Name: Muhammad Sherjeel Akhtar---------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------Rollno:20p-0101------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------Section:5A-----------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------LabNo:12-------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------786------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Q:1 Create a database named your rollno_section (i.e. 18P0014_6B).
+
+lab_12> show databases
+admin   40.00 KiB
+config  72.00 KiB
+lab_11  72.00 KiB
+lab_12   7.72 MiB
+local   72.00 KiB
+lab_12> use 20p_0101
+switched to db 20p_0101
+
+
+Q:2 Create collections named cities and moviepeople_1000.
+
+20p_0101> db.createCollection("cities")
+{ ok: 1 }
+20p_0101> show tables
+cities
+20p_0101> show collections
+cities
+20p_0101> db.createCollection("moviepeople_1000")
+{ ok: 1 }
+20p_0101> show collections
+cities
+moviepeople_1000
+
+
+Q:3 Import the documents cities.jsonl and moviepeople-1000.jsonl into the cities and
+moviepeople collection respectively by issuing the following command.
+
+spoofy@spoofy-Precision-M4600:/$ cd ~/Downloads
+spoofy@spoofy-Precision-M4600:~/Downloads$ ls
+ cities.jsonl    moviepeople-1000.jsonl  'Semister 5'             TT
+ download.html   Quran                    tf16411250_win32.potx   Wordpress
+spoofy@spoofy-Precision-M4600:~/Downloads$ mongoimport --db 20p_0101 --collection cities --file cities.jsonl
+2022-11-20T15:49:30.178+0500	connected to: mongodb://localhost/
+2022-11-20T15:49:33.179+0500	[################........] 20p_0101.cities	9.53MB/13.7MB (69.7%)
+2022-11-20T15:49:34.556+0500	[########################] 20p_0101.cities	13.7MB/13.7MB (100.0%)
+2022-11-20T15:49:34.556+0500	99838 document(s) imported successfully. 0 document(s) failed to import.
+spoofy@spoofy-Precision-M4600:~/Downloads$ mongoimport --db 20p_0101 --collection moviepeople_1000 --file moviepeople-1000.jsonl
+2022-11-20T15:50:37.020+0500	connected to: mongodb://localhost/
+2022-11-20T15:50:37.241+0500	1000 document(s) imported successfully. 0 document(s) failed to import.
+spoofy@spoofy-Precision-M4600:~/Downloads$ 
+
+Q:4 In the mongo shell client, write queries for finding:
+
+i. All those cities whose time zone is Africa/Harare.
+
+20p_0101> db.cities.find({timezone:"Africa/Harare"})
+[
+  {
+    _id: ObjectId("637a063e7411b867d3b8d924"),
+    name: 'Zvishavane',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 35896,
+    location: { latitude: -20.32674, longitude: 30.06648 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d927"),
+    name: 'Shurugwi',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 17075,
+    location: { latitude: -19.67016, longitude: 30.00589 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d92a"),
+    name: 'Victoria Falls',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 35761,
+    location: { latitude: -17.92353, longitude: 25.84299 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d92b"),
+    name: 'Rusape',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 29292,
+    location: { latitude: -18.52785, longitude: 32.12843 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d92c"),
+    name: 'Shangani',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 3835,
+    location: { latitude: -19.78333, longitude: 29.36667 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d92d"),
+    name: 'Shamva',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 10317,
+    location: { latitude: -17.31159, longitude: 31.57561 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d92e"),
+    name: 'Redcliff',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 33197,
+    location: { latitude: -19.03333, longitude: 29.78333 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d92f"),
+    name: 'Penhalonga',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 7681,
+    location: { latitude: -18.89112, longitude: 32.69781 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d930"),
+    name: 'Raffingora',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 1957,
+    location: { latitude: -17.03333, longitude: 30.43333 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d931"),
+    name: 'Plumtree',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 2148,
+    location: { latitude: -20.48333, longitude: 27.81667 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d933"),
+    name: 'Nyanga',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 4852,
+    location: { latitude: -18.21667, longitude: 32.75 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d934"),
+    name: 'Mvurwi',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 7970,
+    location: { latitude: -17.03333, longitude: 30.85 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d935"),
+    name: 'Mutare',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 184205,
+    location: { latitude: -18.9707, longitude: 32.67086 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d936"),
+    name: 'Murehwa',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 8559,
+    location: { latitude: -17.64322, longitude: 31.784 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d937"),
+    name: 'Mvuma',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 4331,
+    location: { latitude: -19.27924, longitude: 30.52828 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d938"),
+    name: 'Mutoko',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 9532,
+    location: { latitude: -17.39699, longitude: 32.22677 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d939"),
+    name: 'Odzi',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 3438,
+    location: { latitude: -18.96167, longitude: 32.40557 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d93a"),
+    name: 'Mount Darwin',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 6349,
+    location: { latitude: -16.77251, longitude: 31.58381 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d93b"),
+    name: 'Nyazura',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 2110,
+    location: { latitude: -18.70587, longitude: 32.16796 }
+  },
+  {
+    _id: ObjectId("637a063e7411b867d3b8d93c"),
+    name: 'Mhangura',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 6503,
+    location: { latitude: -16.89386, longitude: 30.16828 }
+  }
+]
+Type "it" for more
+
+ii. All those cities whose population is greater than 12985000.
+
+20p_0101> db.cities.find({population:{$gt:12985000}})
+[
+  {
+    _id: ObjectId("637a063a7411b867d3b7564a"),
+    name: 'Buenos Aires',
+    country: 'AR',
+    timezone: 'America/Argentina/Buenos_Aires',
+    population: 13076300,
+    location: { latitude: -34.61315, longitude: -58.37723 }
+  },
+  {
+    _id: ObjectId("637a063a7411b867d3b77a42"),
+    name: 'Shanghai',
+    country: 'CN',
+    timezone: 'Asia/Shanghai',
+    population: 14608512,
+    location: { longitude: 31.22222, latitude: 121.45806 }
+	  }
+]
+
+iii. A city whose longitude equals to -58.37723. Your query should return location and population fields only. 
+
+20p_0101> db.cities.find({"location.longitude":-58.37723},{location:1,population:1})
+[
+  {
+    _id: ObjectId("637a063a7411b867d3b7564a"),
+    population: 13076300,
+    location: { latitude: -34.61315, longitude: -58.37723 }
+  }
+]
+
+Q:5 Write a query to update the population from 35000 to 55000 whose country is PK and a location latitude of 73.2122.
+
+20p_0101> db.cities.updateOne({country:"PK","location.latitude":73.2122},{$set:{population:55000}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+20p_0101> db.cities.updateMany({country:"PK","location.latitude":73.2122},{$set:{population:55000}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+
+
+Q:6 Write a query to delete the document whose timezone is Asia/Karachi and a country is PK. 
+
+20p_0101> db.cities.deleteOne({timezone:"Asia/Karachi",country:"PK"})
+{ acknowledged: true, deletedCount: 1 }
+20p_0101> 
+
+Q:7 Write a query for finding the document whose birthname name array contains (“Freeman, Crispin McDougal”) as a value. 
+
+20p_0101> db.moviepeople_1000.find({"info.birthname":["Freeman, Crispin McDougal"]},{person_name:1})
+[ { _id: ObjectId("637a067dda681e34bc1d4244") } ]
+
+

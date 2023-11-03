@@ -1,0 +1,139 @@
+-- Table structure for table `lms_admin`
+--
+
+CREATE TABLE `lms_admin` (
+  `admin_id` int(11) NOT NULL,
+  `admin_email` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `admin_password` varchar(100) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+
+
+-- Table structure for table `lms_author`
+--
+
+CREATE TABLE `lms_author` (
+  `author_id` int(11) NOT NULL,
+  `author_name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `author_status` enum('Enable','Disable') COLLATE utf8_unicode_ci NOT NULL,
+  `author_created_on` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `author_updated_on` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+
+
+
+-- Table structure for table `lms_book`
+--
+
+CREATE TABLE `lms_book` (
+  `book_id` int(11) NOT NULL,
+  `book_category` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `book_author` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `book_location_rack` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `book_name` text COLLATE utf8_unicode_ci NOT NULL,
+  `book_isbn_number` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `book_no_of_copy` int(5) NOT NULL,
+  `book_status` enum('Enable','Disable') COLLATE utf8_unicode_ci NOT NULL,
+  `book_added_on` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `book_updated_on` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+
+
+
+-- Table structure for table `lms_category`
+--
+
+CREATE TABLE `lms_category` (
+  `category_id` int(11) NOT NULL,
+  `category_name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `category_status` enum('Enable','Disable') COLLATE utf8_unicode_ci NOT NULL,
+  `category_created_on` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `category_updated_on` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+
+
+
+-- Table structure for table `lms_issue_book`
+--
+
+CREATE TABLE `lms_issue_book` (
+  `issue_book_id` int(11) NOT NULL,
+  `book_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `issue_date_time` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `expected_return_date` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `return_date_time` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `book_fines` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `book_issue_status` enum('Issue','Return','Not Return') COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+
+
+
+
+-- Table structure for table `lms_location_rack`
+--
+
+CREATE TABLE `lms_location_rack` (
+  `location_rack_id` int(11) NOT NULL,
+  `location_rack_name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `location_rack_status` enum('Enable','Disable') COLLATE utf8_unicode_ci NOT NULL,
+  `location_rack_created_on` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `location_rack_updated_on` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+
+
+
+-- Table structure for table `lms_setting`
+--
+
+CREATE TABLE `lms_setting` (
+  `setting_id` int(11) NOT NULL,
+  `library_name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `library_address` text COLLATE utf8_unicode_ci NOT NULL,
+  `library_contact_number` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `library_email_address` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `library_total_book_issue_day` int(5) NOT NULL,
+  `library_one_day_fine` decimal(4,2) NOT NULL,
+  `library_issue_total_book_per_user` int(3) NOT NULL,
+  `library_currency` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `library_timezone` varchar(100) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+
+
+
+-- Table structure for table `lms_user`
+--
+
+CREATE TABLE `lms_user` (
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `user_address` text COLLATE utf8_unicode_ci NOT NULL,
+  `user_contact_no` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `user_profile` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `user_email_address` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `user_password` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `user_verificaton_code` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `user_verification_status` enum('No','Yes') COLLATE utf8_unicode_ci NOT NULL,
+  `user_unique_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `user_status` enum('Enable','Disable') COLLATE utf8_unicode_ci NOT NULL,
+  `user_created_on` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `user_updated_on` varchar(30) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+
+
+

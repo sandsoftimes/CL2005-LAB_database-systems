@@ -1,0 +1,109 @@
+------------------------------------------------------------------------Name: Muhammad Sherjeel Akhtar---------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------Rollno:20p-0101------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------Section:5A-----------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------LabNo:12-------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------786------------------------------------------------------------------------------------------------------------------------------
+
+----Question: 1
+
+db.cities.find({population:{$lt:30,$ne:0}}).limit(2)
+{ _id: ObjectId("637f481b9b22b75e57b478a7"),
+  name: 'Tanggul',
+  country: 'ID',
+  timezone: 'Asia/Jakarta',
+  population: 3,
+  location: { latitude: -8.1645, longitude: 113.4525 } }
+{ _id: ObjectId("637f481d9b22b75e57b4b640"),
+  name: 'Ereencav',
+  country: 'MN',
+  timezone: 'Asia/Choibalsan',
+  population: 23,
+  location: { longitude: 49.8807, latitude: 115.72526 } }
+  
+----Question: 2
+	
+  db.cities.countDocuments({timezone:"Asia/Jakarta"})
+1430
+
+----Question: 3
+
+db.cities.find({country:"PK"},{timezone:"Asia/Karachi"}).sort({Population:-1})
+{ _id: ObjectId("637f481e9b22b75e57b4d8cf"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8d0"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8d1"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8d2"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8d3"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8d4"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8d5"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8d6"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8d7"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8d8"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8d9"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8da"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8db"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8dc"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8dd"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8de"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8df"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8e0"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8e1"),
+  timezone: 'Asia/Karachi' }
+{ _id: ObjectId("637f481e9b22b75e57b4d8e2"),
+  timezone: 'Asia/Karachi' }
+Type "it" for more
+
+db.cities.find({country:"PK"},{timezone:"Asia/Karachi"}).sort({Population:-1}).forEach(printjson);
+
+----Question: 4
+
+db.cities.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+
+db.Employee.createIndex({population:1})
+'population_1'
+
+db.cities.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+db.Employee.createIndex({population:1})
+
+'population_1'
+
+db.Employee.dropIndex({population:1})
+{ nIndexesWas: 2, ok: 1 }
+
+db.cities.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { population: 1 }, name: 'population_1' }
+]
+
+db.cities.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { population: 1 }, name: 'population_1' }
+]
+db.cities.dropIndex({population:1})
+{ nIndexesWas: 2, ok: 1 }
+
+db.cities.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+
+

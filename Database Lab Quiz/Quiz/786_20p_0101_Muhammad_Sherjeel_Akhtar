@@ -1,0 +1,184 @@
+-------------------------------------------_EX_10----------------------------
+
+
+MariaDB [guest_house]> select city,hotel.hotelno,count(distinct(roomno)) from room,hotel where hotel.city='London' group by hotelno;
++--------+---------+-------------------------+
+| city   | hotelno | count(distinct(roomno)) |
++--------+---------+-------------------------+
+| London | ch01    |                       7 |
+| London | ch02    |                       7 |
+| London | fb01    |                       7 |
++--------+---------+-------------------------+
+3 rows in set (0.001 sec)
+
+---EX-9--------
+
+MariaDB [guest_house]> select hotelname from hotel h join room r on h.hotelno = r.hotelno HAVING COUNT(roomno) > 2;
++---------------+
+| hotelname     |
++---------------+
+| Omni Shoreham |
++---------------+
+1 row in set (0.001 sec)
+
+
+----EX-8-----
+
+MariaDB [guest_house]> select distinct(guestname) from guest G,booking B,hotel H where G.guestno in(select X.guestno from booking X,hotel J where X.hotelno='fb02');
+
++--------------+
+| guestname    |
++--------------+
+| John Kay     |
+| Mary Tregear |
++--------------+
+2 rows in set (0.002 sec)
+
+-----EX-7--------
+
+MariaDB [guest_house]> select price,type,hotelname from room,hotel where hotelname='Grosvenor';
++-------+--------+-----------+
+| price | type   | hotelname |
++-------+--------+-----------+
+| 19.00 | single | Grosvenor |
+| 29.00 | double | Grosvenor |
+| 10.00 | single | Grosvenor |
+| 39.00 | family | Grosvenor |
+| 15.00 | double | Grosvenor |
+| 18.00 | single | Grosvenor |
+| 29.99 | single | Grosvenor |
+| 30.00 | double | Grosvenor |
+| 58.00 | single | Grosvenor |
+| 59.99 | family | Grosvenor |
+| 35.00 | family | Grosvenor |
+| 86.00 | double | Grosvenor |
++-------+--------+-----------+
+
+EX------5-------
+
+MariaDB [guest_house]> select hotelname,room.hotelno,room.type from room,hotel where type not in ('family') group by hotelname,room.type;
++---------------+---------+--------+
+| hotelname     | hotelno | type   |
++---------------+---------+--------+
+| Grosvenor     | fb01    | double |
+| Grosvenor     | fb01    | single |
+| Latham        | fb01    | double |
+| Latham        | fb01    | single |
+| Omni Shoreham | fb01    | double |
+| Omni Shoreham | fb01    | single |
+| Phoenix Park  | fb01    | double |
+| Phoenix Park  | fb01    | single |
+| Watergate     | fb01    | double |
+| Watergate     | fb01    | single |
++---------------+---------+--------+
+10 rows in set (0.001 sec)
+
+OR
+
+MariaDB [guest_house]> select hotelname,room.hotelno,room.type from room,hotel where type not in ('family');
++---------------+---------+--------+
+| hotelname     | hotelno | type   |
++---------------+---------+--------+
+| Omni Shoreham | fb01    | single |
+| Phoenix Park  | fb01    | single |
+| Latham        | fb01    | single |
+| Grosvenor     | fb01    | single |
+| Watergate     | fb01    | single |
+| Omni Shoreham | fb01    | double |
+| Phoenix Park  | fb01    | double |
+| Latham        | fb01    | double |
+| Grosvenor     | fb01    | double |
+| Watergate     | fb01    | double |
+| Omni Shoreham | ch02    | single |
+| Phoenix Park  | ch02    | single |
+| Latham        | ch02    | single |
+| Grosvenor     | ch02    | single |
+| Watergate     | ch02    | single |
+| Omni Shoreham | ch02    | double |
+| Phoenix Park  | ch02    | double |
+| Latham        | ch02    | double |
+| Grosvenor     | ch02    | double |
+| Watergate     | ch02    | double |
+| Omni Shoreham | dc01    | single |
+| Phoenix Park  | dc01    | single |
+| Latham        | dc01    | single |
+| Grosvenor     | dc01    | single |
+| Watergate     | dc01    | single |
+| Omni Shoreham | ch01    | single |
+| Phoenix Park  | ch01    | single |
+| Latham        | ch01    | single |
+| Grosvenor     | ch01    | single |
+| Watergate     | ch01    | single |
+| Omni Shoreham | dc01    | double |
+| Phoenix Park  | dc01    | double |
+| Latham        | dc01    | double |
+| Grosvenor     | dc01    | double |
+| Watergate     | dc01    | double |
+| Omni Shoreham | fb02    | single |
+| Phoenix Park  | fb02    | single |
+| Latham        | fb02    | single |
+| Grosvenor     | fb02    | single |
+| Watergate     | fb02    | single |
+| Omni Shoreham | fb02    | double |
+| Phoenix Park  | fb02    | double |
+| Latham        | fb02    | double |
+| Grosvenor     | fb02    | double |
+| Watergate     | fb02    | double |
++---------------+---------+--------+
+45 rows in set (0.001 sec)
+
+EX-3------------------------------------
+
+MariaDB [guest_house]> select roomno , h.hotelno , hotelname from hotel h join room r on h.hotelno = r.hotelno group by r.price order by r.price limit 1 offset 2 ;
++--------+---------+-----------+
+| roomno | hotelno | hotelname |
++--------+---------+-----------+
+|    901 | dc01    | Latham    |
++--------+---------+-----------+
+1 row in set (0.001 sec)
+
+
+Ex-2----------
+
+MariaDB [guest_house]> select roomno,hotelno,hotelname from room natural join hotel order by room.price limit 2;
++--------+---------+--------------+
+| roomno | hotelno | hotelname    |
++--------+---------+--------------+
+|    701 | ch02    | Phoenix Park |
+|    801 | ch02    | Phoenix Park |
++--------+---------+--------------+
+2 rows in set (0.001 sec)
+
+EX-1-------------
+
+MariaDB [guest_house]> select roomno , h.hotelno , hotelname from hotel h join room r on h.hotelno = r.hotelno group by r.price order by r.price desc limit 1,1 ;
++--------+---------+---------------+
+| roomno | hotelno | hotelname     |
++--------+---------+---------------+
+|   1101 | ch01    | Omni Shoreham |
++--------+---------+---------------+
+1 row in set (0.001 sec)
+
+EX-4------------------
+
+MariaDB [guest_house]> select hotelname from hotel r join room h on r.hotelno = h.hotelno where (h.type = 'double') AND (h.type = 'family');
+Empty set (0.001 sec)
+
+EX---------6
+
+MariaDB [guest_house]> SELECT type , r.hotelno , hotelname from room r join hotel h on r.hotelno = h.hotelno where (type = 'double') OR (type = 'family') AND (price < 40) ORDER BY price ASC;
++--------+---------+--------------+
+| type   | hotelno | hotelname    |
++--------+---------+--------------+
+| double | ch02    | Phoenix Park |
+| double | fb01    | Grosvenor    |
+| double | dc01    | Latham       |
+| family | dc01    | Latham       |
+| family | fb01    | Grosvenor    |
+| double | fb02    | Watergate    |
++--------+---------+--------------+
+6 rows in set (0.001 sec)
+
+
+
+

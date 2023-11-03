@@ -1,0 +1,736 @@
+######786#####
+Name: Muhammad Sherjeel Akhtar
+Roll No: 20p-0101
+Section: BCS-5A
+Subject: Database System Lab 
+
+Q1:
+
+  SELECT MAX(Salary) FROM Employees
+  WHERE Salary NOT IN (SELECT MAX(Salary) FROM Employees );
++------------+-----------+----------+
+| first_name | last_name | SALARY   |
++------------+-----------+----------+
+| Steven     | King      | 24000.00 |
++------------+-----------+----------+
+1 row in set (0.000 sec)
+
+ 
+
+Q2:
+SELECT first_name, MAX(salary) AS salary
+      FROM employees
+     WHERE salary < (SELECT MAX(salary)
+                    FROM employees);
+                
++------------+-----------+----------+
+| first_name | last_name | salary   |
++------------+-----------+----------+
+| Neena      | Kochhar   | 17000.00 |
++------------+-----------+----------+
+1 row in set (0.001 sec)
+
+Q3:
+
+SELECT first_name, MAX(salary) AS salary
+       FROM employees
+      WHERE salary < (SELECT MAX(salary)
+                      FROM employees
+                      WHERE salary < (SELECT MAX(salary)
+                      FROM employees)
+                    );
+                
++------------+-----------+----------+
+| first_name | last_name | salary   |
++------------+-----------+----------+
+| John       | Russell   | 14000.00 |
++------------+-----------+----------+
+1 row in set (0.001 sec)
+
+Q4:
+ SELECT EMPLOYEE_ID , FIRST_NAME,LAST_NAME, JOB_ID , SALARY FROM EMPLOYEES WHERE job_id LIKE '___C%'
+    -> AND SALARY = (SELECT MAX(SALARY) FROM EMPLOYEES WHERE job_id LIKE '___C%');
++-------------+------------+-----------+----------+---------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | JOB_ID   | SALARY  |
++-------------+------------+-----------+----------+---------+
+|         184 | Nandita    | Sarchand  | SH_CLERK | 4200.00 |
++-------------+------------+-----------+----------+---------+
+1 row in set (0.002 sec)
+
+Q5:
+ SELECT EMPLOYEE_ID , FIRST_NAME,LAST_NAME, JOB_ID,salary  FROM EMPLOYEES WHERE job_id LIKE '___ACC%'
+    -> AND SALARY > (SELECT MAX(SALARY) FROM EMPLOYEES WHERE job_id LIKE '___C%');
++-------------+-------------+-----------+------------+---------+
+| EMPLOYEE_ID | FIRST_NAME  | LAST_NAME | JOB_ID     | salary  |
++-------------+-------------+-----------+------------+---------+
+|         109 | Daniel      | Faviet    | FI_ACCOUNT | 9000.00 |
+|         110 | John        | Chen      | FI_ACCOUNT | 8200.00 |
+|         111 | Ismael      | Sciarra   | FI_ACCOUNT | 7700.00 |
+|         112 | Jose Manuel | Urman     | FI_ACCOUNT | 7800.00 |
+|         113 | Luis        | Popp      | FI_ACCOUNT | 6900.00 |
+|         206 | William     | Gietz     | AC_ACCOUNT | 8300.00 |
++-------------+-------------+-----------+------------+---------+
+6 rows in set (0.000 sec)
+
+
+Q6:
+ SELECT EMPLOYEE_ID , FIRST_NAME,LAST_NAME, JOB_ID,salary  FROM EMPLOYEES WHERE job_id LIKE '___C%'
+    -> AND SALARY > (SELECT MIN(SALARY) FROM EMPLOYEES WHERE job_id LIKE '___PRO%');
+Empty set (0.000 sec)
+
+The set is empty since no clerk has salary higher then the lowest salary of the programmer ,
+but in order to show any result i changed the salary of the clerk to 5100 and i got one result
+
+ SELECT EMPLOYEE_ID , FIRST_NAME,LAST_NAME, JOB_ID,salary  FROM EMPLOYEES WHERE job_id LIKE '___C%'
+    -> AND SALARY > (SELECT MIN(SALARY) FROM EMPLOYEES WHERE job_id LIKE '___PRO%');
++-------------+------------+-----------+----------+---------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | JOB_ID   | salary  |
++-------------+------------+-----------+----------+---------+
+|         115 | Alexander  | Khoo      | PU_CLERK | 5100.00 |
++-------------+------------+-----------+----------+---------+
+1 row in set (0.001 sec)
+
+
+
+Q7:
+
+ SELECT FIRST_NAME ,LAST_NAME , SALARY FROM EMPLOYEES WHERE SALARY > ALL(SELECT SALARY FROM EMPLOYEES
+     WHERE FIRST_NAME LIKE 'L___%' OR FIRST_NAME LIKE 'P____%'  );
++------------+-----------+----------+
+| FIRST_NAME | LAST_NAME | SALARY   |
++------------+-----------+----------+
+| Steven     | King      | 24000.00 |
+| Neena      | Kochhar   | 17000.00 |
+| Lex        | De Haan   | 17000.00 |
+| Nancy      | Greenberg | 12000.00 |
+| John       | Russell   | 14000.00 |
+| Karen      | Partners  | 13500.00 |
+| Alberto    | Errazuriz | 12000.00 |
+| Michael    | Hartstein | 13000.00 |
+| Shelley    | Higgins   | 12000.00 |
++------------+-----------+----------+
+9 rows in set (0.001 sec)
+
+
+Q8:
+
+SELECT FIRST_NAME , LAST_NAME ,SALARY
+    -> FROM EMPLOYEES SL
+    -> WHERE SL.SALARY  >(SELECT AVG(SALARY)
+    -> FROM EMPLOYEES SA
+    -> WHERE SA.DEPARTMENT_ID = SL.DEPARTMENT_ID);
+
++------------+-----------+----------+
+| FIRST_NAME | LAST_NAME | SALARY   |
++------------+-----------+----------+
+| Steven     | King      | 24000.00 |
+| Alexander  | Hunold    |  9000.00 |
+| Bruce      | Ernst     |  6000.00 |
+| Nancy      | Greenberg | 12000.00 |
+| Daniel     | Faviet    |  9000.00 |
+| Den        | Raphaely  | 11000.00 |
+| Alexander  | Khoo      |  5100.00 |
+| Matthew    | Weiss     |  8000.00 |
+| Adam       | Fripp     |  8200.00 |
+| Payam      | Kaufling  |  7900.00 |
+| Shanta     | Vollman   |  6500.00 |
+| Kevin      | Mourgos   |  5800.00 |
+| Renske     | Ladwig    |  3600.00 |
+| Trenna     | Rajs      |  3500.00 |
+| John       | Russell   | 14000.00 |
+| Karen      | Partners  | 13500.00 |
+| Alberto    | Errazuriz | 12000.00 |
+| Gerald     | Cambrault | 11000.00 |
+| Eleni      | Zlotkey   | 10500.00 |
+| Peter      | Tucker    | 10000.00 |
+| David      | Bernstein |  9500.00 |
+| Peter      | Hall      |  9000.00 |
+| Janette    | King      | 10000.00 |
+| Patrick    | Sully     |  9500.00 |
+| Allan      | McEwen    |  9000.00 |
+| Clara      | Vishney   | 10500.00 |
+| Danielle   | Greene    |  9500.00 |
+| Lisa       | Ozer      | 11500.00 |
+| Harrison   | Bloom     | 10000.00 |
+| Tayler     | Fox       |  9600.00 |
+| Ellen      | Abel      | 11000.00 |
+| Nandita    | Sarchand  |  4200.00 |
+| Alexis     | Bull      |  4100.00 |
+| Kelly      | Chung     |  3800.00 |
+| Jennifer   | Dilly     |  3600.00 |
+| Sarah      | Bell      |  4000.00 |
+| Britney    | Everett   |  3900.00 |
+| Michael    | Hartstein | 13000.00 |
+| Shelley    | Higgins   | 12000.00 |
++------------+-----------+----------+
+39 rows in set (0.001 sec)
+
+
+Q9:
+
+SELECT FIRST_NAME , LAST_NAME ,SALARY , department_id
+    -> FROM EMPLOYEES SL
+    ->  WHERE SL.SALARY  = (SELECT DISTINCT MAX(SALARY)
+    -> FROM EMPLOYEES SA
+    -> WHERE SA.department_id = SL.department_id);
++------------+-----------+----------+---------------+
+| FIRST_NAME | LAST_NAME | SALARY   | department_id |
++------------+-----------+----------+---------------+
+| Steven     | King      | 24000.00 |            90 |
+| Alexander  | Hunold    |  9000.00 |            60 |
+| Nancy      | Greenberg | 12000.00 |           100 |
+| Den        | Raphaely  | 11000.00 |            30 |
+| Adam       | Fripp     |  8200.00 |            50 |
+| John       | Russell   | 14000.00 |            80 |
+| Jennifer   | Whalen    |  4400.00 |            10 |
+| Michael    | Hartstein | 13000.00 |            20 |
+| Susan      | Mavris    |  6500.00 |            40 |
+| Hermann    | Baer      | 10000.00 |            70 |
+| Shelley    | Higgins   | 12000.00 |           110 |
++------------+-----------+----------+---------------+
+
+
+
+Q10:
+
+SELECT FIRST_NAME , LAST_NAME ,JOB_TITLE
+     FROM EMPLOYEES A
+     INNER JOIN JOBS B
+     ON A.JOB_ID = B.JOB_ID
+     WHERE DEPARTMENT_ID = 20
+     GROUP BY job_title;
++------------+-----------+--------------------------+
+| FIRST_NAME | LAST_NAME | JOB_TITLE                |
++------------+-----------+--------------------------+
+| Michael    | Hartstein | Marketing Manager        |
+| Pat        | Fay       | Marketing Representative |
++------------+-----------+--------------------------+
+2 rows in set (0.001 sec)
+
+
+
+Q11:
+
+ SELECT FIRST_NAME , LAST_NAME ,SALARY
+    ->      FROM EMPLOYEES SL
+    ->      WHERE SL.SALARY  = ALL(SELECT DISTINCT MAX(SALARY)
+    ->      FROM EMPLOYEES SA
+    ->      WHERE SA.JOB_ID = SL.JOB_ID);
++------------+-----------+----------+
+| FIRST_NAME | LAST_NAME | SALARY   |
++------------+-----------+----------+
+| Steven     | King      | 24000.00 |
+| Neena      | Kochhar   | 17000.00 |
+| Lex        | De Haan   | 17000.00 |
+| Alexander  | Hunold    |  9000.00 |
+| Nancy      | Greenberg | 12000.00 |
+| Daniel     | Faviet    |  9000.00 |
+| Den        | Raphaely  | 11000.00 |
+| Alexander  | Khoo      |  5100.00 |
+| Adam       | Fripp     |  8200.00 |
+| Renske     | Ladwig    |  3600.00 |
+| John       | Russell   | 14000.00 |
+| Lisa       | Ozer      | 11500.00 |
+| Nandita    | Sarchand  |  4200.00 |
+| Jennifer   | Whalen    |  4400.00 |
+| Michael    | Hartstein | 13000.00 |
+| Pat        | Fay       |  6000.00 |
+| Susan      | Mavris    |  6500.00 |
+| Hermann    | Baer      | 10000.00 |
+| Shelley    | Higgins   | 12000.00 |
+| William    | Gietz     |  8300.00 |
++------------+-----------+----------+
+20 rows in set (0.002 sec)
+
+
+Q12:
+
+ SELECT FIRST_NAME ,LAST_NAME FROM EMPLOYEES
+    -> WHERE DEPARTMENT_ID = 20
+    -> GROUP BY JOB_ID = ALL(SELECT JOB_ID FROM EMPLOYEES WHERE DEPARTMENT_ID = 50);
++------------+-----------+
+| FIRST_NAME | LAST_NAME |
++------------+-----------+
+| Michael    | Hartstein |
++------------+-----------+
+1 row in set (0.010 sec)
+
+Q13:
+
+SELECT e.department_id, e.first_name, e.job_id , d.department_name  
+FROM employees e , departments d  
+WHERE e.department_id = d.department_id  
+AND  d.department_name = 'Finance';
++---------------+-------------+------------+-----------------+
+| department_id | first_name  | job_id     | department_name |
++---------------+-------------+------------+-----------------+
+|           100 | Nancy       | FI_MGR     | Finance         |
+|           100 | Daniel      | FI_ACCOUNT | Finance         |
+|           100 | John        | FI_ACCOUNT | Finance         |
+|           100 | Ismael      | FI_ACCOUNT | Finance         |
+|           100 | Jose Manuel | FI_ACCOUNT | Finance         |
+|           100 | Luis        | FI_ACCOUNT | Finance         |
++---------------+-------------+------------+-----------------+
+
+
+Q14:
+SELECT  first_name, last_name
+FROM employees  
+WHERE department_id = 
+(SELECT department_id  
+FROM departments 
+WHERE location_id = 
+(SELECT location_id 
+FROM locations 
+WHERE city ='Toronto'));
++------------+-----------+
+| FIRST_NAME | LAST_NAME | 
++------------+-----------+
+| Michael    | Hartstein | 
+| Pat        | Fay       | 
++------------+-----------+
+2 rows in set (0.000 sec)
+
+
+
+Q15:
+
+SELECT CONCAT(FIRST_NAME," " ,LAST_NAME) AS Full_Name , d.department_name , b.job_title , e.country_name,c.city
+    -> FROM EMPLOYEES a
+    -> INNER JOIN jobs b
+    -> ON a.job_id = b.job_id
+    -> INNER JOIN departments d
+    -> ON a.department_id = d.department_id
+    -> INNER JOIN locations c
+    -> ON d.location_id = c.location_id
+    -> INNER JOIN countries e
+    -> ON c.country_id = e.country_id;
++-------------------+------------------+---------------------------------+--------------------------+---------------------+
+| Full_Name         | department_name  | job_title                       | country_name             | city                |
++-------------------+------------------+---------------------------------+--------------------------+---------------------+
+| William Gietz     | Accounting       | Public Accountant               | United States of America | Seattle             |
+| Shelley Higgins   | Accounting       | Accounting Manager              | United States of America | Seattle             |
+| Jennifer Whalen   | Administration   | Administration Assistant        | United States of America | Seattle             |
+| Steven King       | Executive        | President                       | United States of America | Seattle             |
+| Neena Kochhar     | Executive        | Administration Vice President   | United States of America | Seattle             |
+| Lex De Haan       | Executive        | Administration Vice President   | United States of America | Seattle             |
+| Daniel Faviet     | Finance          | Accountant                      | United States of America | Seattle             |
+| John Chen         | Finance          | Accountant                      | United States of America | Seattle             |
+| Ismael Sciarra    | Finance          | Accountant                      | United States of America | Seattle             |
+| Jose Manuel Urman | Finance          | Accountant                      | United States of America | Seattle             |
+| Luis Popp         | Finance          | Accountant                      | United States of America | Seattle             |
+| Nancy Greenberg   | Finance          | Finance Manager                 | United States of America | Seattle             |
+| Susan Mavris      | Human Resources  | Human Resources Representative  | United Kingdom           | London              |
+| Alexander Hunold  | IT               | Programmer                      | United States of America | Southlake           |
+| Bruce Ernst       | IT               | Programmer                      | United States of America | Southlake           |
+| David Austin      | IT               | Programmer                      | United States of America | Southlake           |
+| Valli Pataballa   | IT               | Programmer                      | United States of America | Southlake           |
+| Diana Lorentz     | IT               | Programmer                      | United States of America | Southlake           |
+| Shanta Vollman    | Shipping         | Marketing Manager               | United States of America | South San Francisco |
+| Michael Hartstein | Marketing        | Marketing Manager               | Canada                   | Toronto             |
+| Pat Fay           | Marketing        | Marketing Representative        | Canada                   | Toronto             |
+| Hermann Baer      | Public Relations | Public Relations Representative | Germany                  | Munich              |
+| Alexander Khoo    | Purchasing       | Purchasing Clerk                | United States of America | Seattle             |
+| Shelli Baida      | Purchasing       | Purchasing Clerk                | United States of America | Seattle             |
+| Sigal Tobias      | Purchasing       | Purchasing Clerk                | United States of America | Seattle             |
+| Guy Himuro        | Purchasing       | Purchasing Clerk                | United States of America | Seattle             |
+| Karen Colmenares  | Purchasing       | Purchasing Clerk                | United States of America | Seattle             |
+| Den Raphaely      | Purchasing       | Purchasing Manager              | United States of America | Seattle             |
+| John Russell      | Sales            | Sales Manager                   | United Kingdom           | Oxford              |
+| Karen Partners    | Sales            | Sales Manager                   | United Kingdom           | Oxford              |
+| Alberto Errazuriz | Sales            | Sales Manager                   | United Kingdom           | Oxford              |
+| Gerald Cambrault  | Sales            | Sales Manager                   | United Kingdom           | Oxford              |
+| Eleni Zlotkey     | Sales            | Sales Manager                   | United Kingdom           | Oxford              |
+| Peter Tucker      | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| David Bernstein   | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Peter Hall        | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Christopher Olsen | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Nanette Cambrault | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Oliver Tuvault    | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Janette King      | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Patrick Sully     | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Allan McEwen      | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Lindsey Smith     | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Louise Doran      | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Sarath Sewall     | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Clara Vishney     | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Danielle Greene   | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Mattea Marvins    | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| David Lee         | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Sundar Ande       | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Amit Banda        | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Lisa Ozer         | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Harrison Bloom    | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Tayler Fox        | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| William Smith     | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Elizabeth Bates   | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Sundita Kumar     | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Ellen Abel        | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Alyssa Hutton     | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Jonathon Taylor   | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Jack Livingston   | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Charles Johnson   | Sales            | Sales Representative            | United Kingdom           | Oxford              |
+| Winston Taylor    | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Jean Fleaur       | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Martha Sullivan   | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Girard Geoni      | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Nandita Sarchand  | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Alexis Bull       | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Julia Dellinger   | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Anthony Cabrio    | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Kelly Chung       | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Jennifer Dilly    | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Timothy Gates     | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Randall Perkins   | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Sarah Bell        | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Britney Everett   | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Samuel McCain     | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Vance Jones       | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Alana Walsh       | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Kevin Feeney      | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Donald OConnell   | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Douglas Grant     | Shipping         | Shipping Clerk                  | United States of America | South San Francisco |
+| Julia Nayer       | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Irene Mikkilineni | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| James Landry      | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Steven Markle     | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Laura Bissot      | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Mozhe Atkinson    | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| James Marlow      | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| TJ Olson          | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Jason Mallin      | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Michael Rogers    | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Ki Gee            | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Hazel Philtanker  | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Renske Ladwig     | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Stephen Stiles    | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| John Seo          | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Joshua Patel      | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Trenna Rajs       | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Curtis Davies     | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Randall Matos     | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Peter Vargas      | Shipping         | Stock Clerk                     | United States of America | South San Francisco |
+| Matthew Weiss     | Shipping         | Stock Manager                   | United States of America | South San Francisco |
+| Adam Fripp        | Shipping         | Stock Manager                   | United States of America | South San Francisco |
+| Payam Kaufling    | Shipping         | Stock Manager                   | United States of America | South San Francisco |
+| Kevin Mourgos     | Shipping         | Stock Manager                   | United States of America | South San Francisco |
++-------------------+------------------+---------------------------------+--------------------------+---------------------+
+106 rows in set (0.001 sec)
+
+Q16:
+
+SELECT DISTINCT first_NAME,last_name,JOB_ID,SALARY FROM EMPLOYEES E WHERE SALARY IN ( SELECT MAX(SALARY) FROM EMPLOYEES E GROUP BY JOB_ID);
++------------+-----------+------------+----------+
+| first_NAME | last_name | JOB_ID     | SALARY   |
++------------+-----------+------------+----------+
+| Steven     | King      | AD_PRES    | 24000.00 |
+| Neena      | Kochhar   | AD_VP      | 17000.00 |
+| Lex        | De Haan   | AD_VP      | 17000.00 |
+| Alexander  | Hunold    | IT_PROG    |  9000.00 |
+| Bruce      | Ernst     | IT_PROG    |  6000.00 |
+| Diana      | Lorentz   | IT_PROG    |  4200.00 |
+| Nancy      | Greenberg | FI_MGR     | 12000.00 |
+| Daniel     | Faviet    | FI_ACCOUNT |  9000.00 |
+| John       | Chen      | FI_ACCOUNT |  8200.00 |
+| Den        | Raphaely  | PU_MAN     | 11000.00 |
+| Alexander  | Khoo      | PU_CLERK   |  5100.00 |
+| Adam       | Fripp     | ST_MAN     |  8200.00 |
+| Shanta     | Vollman   | MK_MAN     |  6500.00 |
+| Renske     | Ladwig    | ST_CLERK   |  3600.00 |
+| John       | Russell   | SA_MAN     | 14000.00 |
+| Alberto    | Errazuriz | SA_MAN     | 12000.00 |
+| Gerald     | Cambrault | SA_MAN     | 11000.00 |
+| Peter      | Tucker    | SA_REP     | 10000.00 |
+| Peter      | Hall      | SA_REP     |  9000.00 |
+| Janette    | King      | SA_REP     | 10000.00 |
+| Allan      | McEwen    | SA_REP     |  9000.00 |
+| Lisa       | Ozer      | SA_REP     | 11500.00 |
+| Harrison   | Bloom     | SA_REP     | 10000.00 |
+| Ellen      | Abel      | SA_REP     | 11000.00 |
+| Nandita    | Sarchand  | SH_CLERK   |  4200.00 |
+| Jennifer   | Dilly     | SH_CLERK   |  3600.00 |
+| Jennifer   | Whalen    | AD_ASST    |  4400.00 |
+| Michael    | Hartstein | MK_MAN     | 13000.00 |
+| Pat        | Fay       | MK_REP     |  6000.00 |
+| Susan      | Mavris    | HR_REP     |  6500.00 |
+| Hermann    | Baer      | PR_REP     | 10000.00 |
+| Shelley    | Higgins   | AC_MGR     | 12000.00 |
+| William    | Gietz     | AC_ACCOUNT |  8300.00 |
++------------+-----------+------------+----------+
+33 rows in set (0.001 sec)
+
+Q17:
+
+ SELECT e.first_name , e.last_name ,
+    ->        d.department_id , d.department_name
+    ->         FROM employees e
+    ->          JOIN departments d
+    ->           ON E.department_id = D.department_id;
++-------------+-------------+---------------+------------------+
+| first_name  | last_name   | department_id | department_name  |
++-------------+-------------+---------------+------------------+
+| Jennifer    | Whalen      |            10 | Administration   |
+| Michael     | Hartstein   |            20 | Marketing        |
+| Pat         | Fay         |            20 | Marketing        |
+| Den         | Raphaely    |            30 | Purchasing       |
+| Alexander   | Khoo        |            30 | Purchasing       |
+| Shelli      | Baida       |            30 | Purchasing       |
+| Sigal       | Tobias      |            30 | Purchasing       |
+| Guy         | Himuro      |            30 | Purchasing       |
+| Karen       | Colmenares  |            30 | Purchasing       |
+| Susan       | Mavris      |            40 | Human Resources  |
+| Matthew     | Weiss       |            50 | Shipping         |
+| Adam        | Fripp       |            50 | Shipping         |
+| Payam       | Kaufling    |            50 | Shipping         |
+| Shanta      | Vollman     |            50 | Shipping         |
+| Kevin       | Mourgos     |            50 | Shipping         |
+| Julia       | Nayer       |            50 | Shipping         |
+| Irene       | Mikkilineni |            50 | Shipping         |
+| James       | Landry      |            50 | Shipping         |
+| Steven      | Markle      |            50 | Shipping         |
+| Laura       | Bissot      |            50 | Shipping         |
+| Mozhe       | Atkinson    |            50 | Shipping         |
+| James       | Marlow      |            50 | Shipping         |
+| TJ          | Olson       |            50 | Shipping         |
+| Jason       | Mallin      |            50 | Shipping         |
+| Michael     | Rogers      |            50 | Shipping         |
+| Ki          | Gee         |            50 | Shipping         |
+| Hazel       | Philtanker  |            50 | Shipping         |
+| Renske      | Ladwig      |            50 | Shipping         |
+| Stephen     | Stiles      |            50 | Shipping         |
+| John        | Seo         |            50 | Shipping         |
+| Joshua      | Patel       |            50 | Shipping         |
+| Trenna      | Rajs        |            50 | Shipping         |
+| Curtis      | Davies      |            50 | Shipping         |
+| Randall     | Matos       |            50 | Shipping         |
+| Peter       | Vargas      |            50 | Shipping         |
+| Winston     | Taylor      |            50 | Shipping         |
+| Jean        | Fleaur      |            50 | Shipping         |
+| Martha      | Sullivan    |            50 | Shipping         |
+| Girard      | Geoni       |            50 | Shipping         |
+| Nandita     | Sarchand    |            50 | Shipping         |
+| Alexis      | Bull        |            50 | Shipping         |
+| Julia       | Dellinger   |            50 | Shipping         |
+| Anthony     | Cabrio      |            50 | Shipping         |
+| Kelly       | Chung       |            50 | Shipping         |
+| Jennifer    | Dilly       |            50 | Shipping         |
+| Timothy     | Gates       |            50 | Shipping         |
+| Randall     | Perkins     |            50 | Shipping         |
+| Sarah       | Bell        |            50 | Shipping         |
+| Britney     | Everett     |            50 | Shipping         |
+| Samuel      | McCain      |            50 | Shipping         |
+| Vance       | Jones       |            50 | Shipping         |
+| Alana       | Walsh       |            50 | Shipping         |
+| Kevin       | Feeney      |            50 | Shipping         |
+| Donald      | OConnell    |            50 | Shipping         |
+| Douglas     | Grant       |            50 | Shipping         |
+| Alexander   | Hunold      |            60 | IT               |
+| Bruce       | Ernst       |            60 | IT               |
+| David       | Austin      |            60 | IT               |
+| Valli       | Pataballa   |            60 | IT               |
+| Diana       | Lorentz     |            60 | IT               |
+| Hermann     | Baer        |            70 | Public Relations |
+| John        | Russell     |            80 | Sales            |
+| Karen       | Partners    |            80 | Sales            |
+| Alberto     | Errazuriz   |            80 | Sales            |
+| Gerald      | Cambrault   |            80 | Sales            |
+| Eleni       | Zlotkey     |            80 | Sales            |
+| Peter       | Tucker      |            80 | Sales            |
+| David       | Bernstein   |            80 | Sales            |
+| Peter       | Hall        |            80 | Sales            |
+| Christopher | Olsen       |            80 | Sales            |
+| Nanette     | Cambrault   |            80 | Sales            |
+| Oliver      | Tuvault     |            80 | Sales            |
+| Janette     | King        |            80 | Sales            |
+| Patrick     | Sully       |            80 | Sales            |
+| Allan       | McEwen      |            80 | Sales            |
+| Lindsey     | Smith       |            80 | Sales            |
+| Louise      | Doran       |            80 | Sales            |
+| Sarath      | Sewall      |            80 | Sales            |
+| Clara       | Vishney     |            80 | Sales            |
+| Danielle    | Greene      |            80 | Sales            |
+| Mattea      | Marvins     |            80 | Sales            |
+| David       | Lee         |            80 | Sales            |
+| Sundar      | Ande        |            80 | Sales            |
+| Amit        | Banda       |            80 | Sales            |
+| Lisa        | Ozer        |            80 | Sales            |
+| Harrison    | Bloom       |            80 | Sales            |
+| Tayler      | Fox         |            80 | Sales            |
+| William     | Smith       |            80 | Sales            |
+| Elizabeth   | Bates       |            80 | Sales            |
+| Sundita     | Kumar       |            80 | Sales            |
+| Ellen       | Abel        |            80 | Sales            |
+| Alyssa      | Hutton      |            80 | Sales            |
+| Jonathon    | Taylor      |            80 | Sales            |
+| Jack        | Livingston  |            80 | Sales            |
+| Charles     | Johnson     |            80 | Sales            |
+| Steven      | King        |            90 | Executive        |
+| Neena       | Kochhar     |            90 | Executive        |
+| Lex         | De Haan     |            90 | Executive        |
+| Nancy       | Greenberg   |           100 | Finance          |
+| Daniel      | Faviet      |           100 | Finance          |
+| John        | Chen        |           100 | Finance          |
+| Ismael      | Sciarra     |           100 | Finance          |
+| Jose Manuel | Urman       |           100 | Finance          |
+| Luis        | Popp        |           100 | Finance          |
+| Shelley     | Higgins     |           110 | Accounting       |
+| William     | Gietz       |           110 | Accounting       |
++-------------+-------------+---------------+------------------+
+106 rows in set (0.001 sec)
+
+Q18:
+
+ SELECT CONCAT(FIRST_NAME," " ,LAST_NAME) AS Full_Name , d.department_name , b.job_title , e.country_name,c.city, r.region_name
+    -> FROM EMPLOYEES a
+    -> INNER JOIN jobs b
+    -> ON a.job_id = b.job_id
+    -> INNER JOIN departments d
+    -> ON a.department_id = d.department_id
+    -> INNER JOIN locations c
+    -> ON d.location_id = c.location_id
+    -> INNER JOIN countries e
+    -> ON c.country_id = e.country_id
+    -> INNER JOIN regions r
+    -> ON e.region_id = r.region_id;
++-------------------+------------------+---------------------------------+--------------------------+---------------------+-------------+
+| Full_Name         | department_name  | job_title                       | country_name             | city                | region_name |
++-------------------+------------------+---------------------------------+--------------------------+---------------------+-------------+
+| Hermann Baer      | Public Relations | Public Relations Representative | Germany                  | Munich              | Europe      |
+| Susan Mavris      | Human Resources  | Human Resources Representative  | United Kingdom           | London              | Europe      |
+| John Russell      | Sales            | Sales Manager                   | United Kingdom           | Oxford              | Europe      |
+| Karen Partners    | Sales            | Sales Manager                   | United Kingdom           | Oxford              | Europe      |
+| Alberto Errazuriz | Sales            | Sales Manager                   | United Kingdom           | Oxford              | Europe      |
+| Gerald Cambrault  | Sales            | Sales Manager                   | United Kingdom           | Oxford              | Europe      |
+| Eleni Zlotkey     | Sales            | Sales Manager                   | United Kingdom           | Oxford              | Europe      |
+| Peter Tucker      | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| David Bernstein   | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Peter Hall        | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Christopher Olsen | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Nanette Cambrault | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Oliver Tuvault    | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Janette King      | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Patrick Sully     | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Allan McEwen      | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Lindsey Smith     | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Louise Doran      | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Sarath Sewall     | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Clara Vishney     | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Danielle Greene   | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Mattea Marvins    | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| David Lee         | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Sundar Ande       | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Amit Banda        | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Lisa Ozer         | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Harrison Bloom    | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Tayler Fox        | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| William Smith     | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Elizabeth Bates   | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Sundita Kumar     | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Ellen Abel        | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Alyssa Hutton     | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Jonathon Taylor   | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Jack Livingston   | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Charles Johnson   | Sales            | Sales Representative            | United Kingdom           | Oxford              | Europe      |
+| Michael Hartstein | Marketing        | Marketing Manager               | Canada                   | Toronto             | Americas    |
+| Pat Fay           | Marketing        | Marketing Representative        | Canada                   | Toronto             | Americas    |
+| Alexander Hunold  | IT               | Programmer                      | United States of America | Southlake           | Americas    |
+| Bruce Ernst       | IT               | Programmer                      | United States of America | Southlake           | Americas    |
+| David Austin      | IT               | Programmer                      | United States of America | Southlake           | Americas    |
+| Valli Pataballa   | IT               | Programmer                      | United States of America | Southlake           | Americas    |
+| Diana Lorentz     | IT               | Programmer                      | United States of America | Southlake           | Americas    |
+| Matthew Weiss     | Shipping         | Stock Manager                   | United States of America | South San Francisco | Americas    |
+| Adam Fripp        | Shipping         | Stock Manager                   | United States of America | South San Francisco | Americas    |
+| Payam Kaufling    | Shipping         | Stock Manager                   | United States of America | South San Francisco | Americas    |
+| Shanta Vollman    | Shipping         | Marketing Manager               | United States of America | South San Francisco | Americas    |
+| Kevin Mourgos     | Shipping         | Stock Manager                   | United States of America | South San Francisco | Americas    |
+| Julia Nayer       | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Irene Mikkilineni | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| James Landry      | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Steven Markle     | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Laura Bissot      | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Mozhe Atkinson    | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| James Marlow      | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| TJ Olson          | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Jason Mallin      | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Michael Rogers    | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Ki Gee            | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Hazel Philtanker  | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Renske Ladwig     | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Stephen Stiles    | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| John Seo          | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Joshua Patel      | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Trenna Rajs       | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Curtis Davies     | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Randall Matos     | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Peter Vargas      | Shipping         | Stock Clerk                     | United States of America | South San Francisco | Americas    |
+| Winston Taylor    | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Jean Fleaur       | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Martha Sullivan   | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Girard Geoni      | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Nandita Sarchand  | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Alexis Bull       | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Julia Dellinger   | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Anthony Cabrio    | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Kelly Chung       | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Jennifer Dilly    | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Timothy Gates     | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Randall Perkins   | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Sarah Bell        | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Britney Everett   | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Samuel McCain     | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Vance Jones       | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Alana Walsh       | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Kevin Feeney      | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Donald OConnell   | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Douglas Grant     | Shipping         | Shipping Clerk                  | United States of America | South San Francisco | Americas    |
+| Jennifer Whalen   | Administration   | Administration Assistant        | United States of America | Seattle             | Americas    |
+| Den Raphaely      | Purchasing       | Purchasing Manager              | United States of America | Seattle             | Americas    |
+| Alexander Khoo    | Purchasing       | Purchasing Clerk                | United States of America | Seattle             | Americas    |
+| Shelli Baida      | Purchasing       | Purchasing Clerk                | United States of America | Seattle             | Americas    |
+| Sigal Tobias      | Purchasing       | Purchasing Clerk                | United States of America | Seattle             | Americas    |
+| Guy Himuro        | Purchasing       | Purchasing Clerk                | United States of America | Seattle             | Americas    |
+| Karen Colmenares  | Purchasing       | Purchasing Clerk                | United States of America | Seattle             | Americas    |
+| Steven King       | Executive        | President                       | United States of America | Seattle             | Americas    |
+| Neena Kochhar     | Executive        | Administration Vice President   | United States of America | Seattle             | Americas    |
+| Lex De Haan       | Executive        | Administration Vice President   | United States of America | Seattle             | Americas    |
+| Nancy Greenberg   | Finance          | Finance Manager                 | United States of America | Seattle             | Americas    |
+| Daniel Faviet     | Finance          | Accountant                      | United States of America | Seattle             | Americas    |
+| John Chen         | Finance          | Accountant                      | United States of America | Seattle             | Americas    |
+| Ismael Sciarra    | Finance          | Accountant                      | United States of America | Seattle             | Americas    |
+| Jose Manuel Urman | Finance          | Accountant                      | United States of America | Seattle             | Americas    |
+| Luis Popp         | Finance          | Accountant                      | United States of America | Seattle             | Americas    |
+| Shelley Higgins   | Accounting       | Accounting Manager              | United States of America | Seattle             | Americas    |
+| William Gietz     | Accounting       | Public Accountant               | United States of America | Seattle             | Americas    |
++-------------------+------------------+---------------------------------+--------------------------+---------------------+-------------+
+106 rows in set (0.011 sec)
+
+
+
+Q19:
+
+
+SELECT first_name, last_name, salary, department_id
+    FROM employees
+     WHERE salary IN
+     ( SELECT MIN(salary)
+     FROM employees
+     GROUP BY department_id
+     HAVING SALARY < 5000
+     );
++------------+------------+---------+---------------+
+| first_name | last_name  | salary  | department_id |
++------------+------------+---------+---------------+
+| Diana      | Lorentz    | 4200.00 |            60 |
+| Karen      | Colmenares | 2500.00 |            30 |
+| James      | Marlow     | 2500.00 |            50 |
+| TJ         | Olson      | 2100.00 |            50 |
+| Joshua     | Patel      | 2500.00 |            50 |
+| Peter      | Vargas     | 2500.00 |            50 |
+| Martha     | Sullivan   | 2500.00 |            50 |
+| Nandita    | Sarchand   | 4200.00 |            50 |
+| Randall    | Perkins    | 2500.00 |            50 |
+| Jennifer   | Whalen     | 4400.00 |            10 |
++------------+------------+---------+---------------+
+10 rows in set (0.010 sec)
+
+

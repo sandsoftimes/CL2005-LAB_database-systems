@@ -1,0 +1,130 @@
+q1
+MariaDB [guest_house]> select roomno , h.hotelno , hotelname from hotel h
+    -> join room r
+    -> on h.hotelno = r.hotelno
+    -> group by r.price
+    -> order by r.price desc limit 1,1 ;
++--------+---------+---------------+
+| roomno | hotelno | hotelname     |
++--------+---------+---------------+
+|   1101 | ch01    | Omni Shoreham |
++--------+---------+---------------+
+1 row in set (0.00 sec)
+
+q3
+MariaDB [guest_house]> select roomno , h.hotelno , hotelname from hotel h
+    -> join room r
+    -> on h.hotelno = r.hotelno
+    -> group by r.price
+    -> order by r.price limit 1 offset 2 ;
++--------+---------+-----------+
+| roomno | hotelno | hotelname |
++--------+---------+-----------+
+|    901 | dc01    | Latham    |
++--------+---------+-----------+
+1 row in set (0.00 sec)
+q4
+
+MariaDB [guest_house]> select hotelname from hotel r
+    -> join room h
+    -> on r.hotelno = h.hotelno
+    -> where (h.type = 'double') AND (h.type = 'family');
+Empty set (0.00 sec)
+
+q 5
+
+MariaDB [guest_house]> select hotelname from hotel h
+    -> join room r
+    -> on h.hotelno  = r.hotelno
+    -> where (r.type = 'single') AND (r.type = 'double') AND (r.type != 'family');
+Empty set (0.00 sec)
++--------------+
+| hotelname    |
++--------------+
+| Grosvenor    |
+| Phoenix Park |
+| Latham       |
+| Watergate    |
++--------------+
+4 rows in set (0.00 sec)
+q6
+
+MariaDB [guest_house]> SELECT type , r.hotelno , hotelname from room r
+    -> join hotel h
+    -> on r.hotelno = h.hotelno
+    -> where (type = 'double') OR (type = 'family')
+    -> AND (price < 40) ORDER BY price ASC;
++--------+---------+--------------+
+| type   | hotelno | hotelname    |
++--------+---------+--------------+
+| double | ch02    | Phoenix Park |
+| double | fb01    | Grosvenor    |
+| double | dc01    | Latham       |
+| family | dc01    | Latham       |
+| family | fb01    | Grosvenor    |
+| double | fb02    | Watergate    |
++--------+---------+--------------+
+6 rows in set (0.00 sec)
+
+q7
+
+MariaDB [guest_house]> select price , type from room r
+    -> join hotel h
+    -> on r.hotelno = h.hotelno
+    -> where h.hotelname = 'Grosvenor';
++-------+--------+
+| price | type   |
++-------+--------+
+| 19.00 | single |
+| 29.00 | double |
+| 39.00 | family |
++-------+--------+
+3 rows in set (0.00 sec)
+
+q8
+
+MariaDB [guest_house]> select guestname from guest g
+    -> join booking b
+    -> on g.guestno = b.guestno
+    -> join hotel h
+    -> on b.hotelno = h.hotelno
+    -> where h.hotelname = 'Watergate';
++--------------+
+| guestname    |
++--------------+
+| John Kay     |
+| Mary Tregear |
++--------------+
+2 rows in set (0.00 sec)
+
+Q9
+
+MariaDB [guest_house]> select hotelname from hotel h
+    -> join room r
+    -> on h.hotelno = r.hotelno
+    -> HAVING COUNT(roomno) > 2;
++---------------+
+| hotelname     |
++---------------+
+| Omni Shoreham |
++---------------+
+1 row in set (0.00 sec)
+
+q10
+
+MariaDB [guest_house]> select roomno , hotelname from room r
+    -> join hotel h
+    -> on r.hotelno = h.hotelno
+    -> where h.city = 'London';
++--------+---------------+
+| roomno | hotelname     |
++--------+---------------+
+|   1001 | Omni Shoreham |
+|   1101 | Omni Shoreham |
+|    701 | Phoenix Park  |
+|    801 | Phoenix Park  |
+|    501 | Grosvenor     |
+|    601 | Grosvenor     |
+|    701 | Grosvenor     |
++--------+---------------+
+7 rows in set (0.00 sec)

@@ -1,0 +1,672 @@
+
+
+MariaDB [hr]> select first_name,salary from employees where salary=(select Max(salary) from employees);
++------------+----------+
+| first_name | salary   |
++------------+----------+
+| Steven     | 24000.00 |
++------------+----------+
+1 row in set (0.001 sec)
+
+
+
+
+
+
+MariaDB [hr]> select first_name,salary from employees where first_name in (select first_name from employees where salary = (select max(salary) from employees where salary < (select max(salary) from employees )));
++------------+----------+
+| first_name | salary   |
++------------+----------+
+| Neena      | 17000.00 |
+| Lex        | 17000.00 |
++------------+----------+
+2 rows in set (0.001 sec)
+
+
+
+MariaDB [hr]> select first_name,salary  from employees order by salary desc limit 1 offset 3;
++------------+----------+
+| first_name | salary   |
++------------+----------+
+| John       | 14000.00 |
++------------+----------+
+1 row in set (0.001 sec)
+
+---------------------------------------------------------------------------------------------------------------------------------------- 
+
+
+
+
+
+MariaDB [hr]> select first_name,salary from employees where job_id = 'PU_CLERK' and salary=(select max(salary) from employees where job_id="PU_CLERK");
++------------+---------+
+| first_name | salary  |
++------------+---------+
+| Alexander  | 3100.00 |
++------------+---------+
+1 row in set (0.001 sec)
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Query 5) Display the names of accountant who earns a salary more than the highest salary of any clerk.
+
+Query Solution)
+
+MariaDB [hr]> select first_name,salary from employees where job_id='FI_ACCOUNT' and salary>(select max(salary) from employees where job_id='PU_CLERK');
++-------------+---------+
+| first_name  | salary  |
++-------------+---------+
+| Daniel      | 9000.00 |
+| John        | 8200.00 |
+| Ismael      | 7700.00 |
+| Jose Manuel | 7800.00 |
+| Luis        | 6900.00 |
++-------------+---------+
+5 rows in set (0.001 sec)
+
+
+
+MariaDB [hr]> select first_name,salary from employees where job_id='PU_CLERK' and salary >(select min(salary) from employees where job_id='IT_PROG');
+Empty set (0.000 sec)
+
+Note: no clerk earns more salary than the lowest salary of a programmer.
+
+
+
+
+MariaDB [hr]> select first_name from employees where salary > (select max(salary) from employees where first_name = 'Peter' or 'lisa');
++------------+
+| first_name |
++------------+
+| Steven     |
+| Neena      |
+| Lex        |
+| Nancy      |
+| Den        |
+| John       |
+| Karen      |
+| Alberto    |
+| Gerald     |
+| Eleni      |
+| Clara      |
+| Lisa       |
+| Ellen      |
+| Michael    |
+| Shelley    |
++------------+
+15 rows in set, 5 warnings (0.001 sec)
+
+
+
+
+MariaDB [hr]> select e.first_name,e.last_name,e.salary from employees e where salary > (select avg(salary) from employees where e.department_id = department_id)order by department_id;
++------------+-----------+----------+
+| first_name | last_name | salary   |
++------------+-----------+----------+
+| Michael    | Hartstein | 13000.00 |
+| Den        | Raphaely  | 11000.00 |
+| Renske     | Ladwig    |  3600.00 |
+| Trenna     | Rajs      |  3500.00 |
+| Kelly      | Chung     |  3800.00 |
+| Jennifer   | Dilly     |  3600.00 |
+| Alexis     | Bull      |  4100.00 |
+| Nandita    | Sarchand  |  4200.00 |
+| Sarah      | Bell      |  4000.00 |
+| Kevin      | Mourgos   |  5800.00 |
+| Shanta     | Vollman   |  6500.00 |
+| Payam      | Kaufling  |  7900.00 |
+| Adam       | Fripp     |  8200.00 |
+| Matthew    | Weiss     |  8000.00 |
+| Britney    | Everett   |  3900.00 |
+| Bruce      | Ernst     |  6000.00 |
+| Alexander  | Hunold    |  9000.00 |
+| Danielle   | Greene    |  9500.00 |
+| Lisa       | Ozer      | 11500.00 |
+| Harrison   | Bloom     | 10000.00 |
+| Tayler     | Fox       |  9600.00 |
+| Ellen      | Abel      | 11000.00 |
+| Clara      | Vishney   | 10500.00 |
+| Allan      | McEwen    |  9000.00 |
+| Patrick    | Sully     |  9500.00 |
+| John       | Russell   | 14000.00 |
+| Karen      | Partners  | 13500.00 |
+| Alberto    | Errazuriz | 12000.00 |
+| Gerald     | Cambrault | 11000.00 |
+| Eleni      | Zlotkey   | 10500.00 |
+| Peter      | Tucker    | 10000.00 |
+| Peter      | Hall      |  9000.00 |
+| Janette    | King      | 10000.00 |
+| David      | Bernstein |  9500.00 |
+| Steven     | King      | 24000.00 |
+| Daniel     | Faviet    |  9000.00 |
+| Nancy      | Greenberg | 12000.00 |
+| Shelley    | Higgins   | 12000.00 |
++------------+-----------+----------+
+38 rows in set (0.001 sec)  note: with repeated values
+
+
+
+MariaDB [hr]> select first_name,last_name,salary from employees where salary in (select max(salary) from employees group by department_id);
++------------+-----------+----------+
+| first_name | last_name | salary   |
++------------+-----------+----------+
+| Steven     | King      | 24000.00 |
+| Alexander  | Hunold    |  9000.00 |
+| Nancy      | Greenberg | 12000.00 |
+| Daniel     | Faviet    |  9000.00 |
+| John       | Chen      |  8200.00 |
+| Den        | Raphaely  | 11000.00 |
+| Adam       | Fripp     |  8200.00 |
+| Shanta     | Vollman   |  6500.00 |
+| John       | Russell   | 14000.00 |
+| Alberto    | Errazuriz | 12000.00 |
+| Gerald     | Cambrault | 11000.00 |
+| Peter      | Tucker    | 10000.00 |
+| Peter      | Hall      |  9000.00 |
+| Oliver     | Tuvault   |  7000.00 |
+| Janette    | King      | 10000.00 |
+| Allan      | McEwen    |  9000.00 |
+| Sarath     | Sewall    |  7000.00 |
+| Harrison   | Bloom     | 10000.00 |
+| Ellen      | Abel      | 11000.00 |
+| Kimberely  | Grant     |  7000.00 |
+| Jennifer   | Whalen    |  4400.00 |
+| Michael    | Hartstein | 13000.00 |
+| Susan      | Mavris    |  6500.00 |
+| Hermann    | Baer      | 10000.00 |
+| Shelley    | Higgins   | 12000.00 |
++------------+-----------+----------+
+25 rows in set (0.001 sec) note: with repeated values 
+
+
+MariaDB [hr]> SELECT first_name, last_name ,salary  FROM employees emp1 WHERE emp1.salary IN (SELECT MAX(salary) FROM employees emp2 WHERE emp1.department_id=emp2.department_id);
++------------+-----------+----------+
+| first_name | last_name | salary   |
++------------+-----------+----------+
+| Steven     | King      | 24000.00 |
+| Alexander  | Hunold    |  9000.00 |
+| Nancy      | Greenberg | 12000.00 |
+| Den        | Raphaely  | 11000.00 |
+| Adam       | Fripp     |  8200.00 |
+| John       | Russell   | 14000.00 |
+| Jennifer   | Whalen    |  4400.00 |
+| Michael    | Hartstein | 13000.00 |
+| Susan      | Mavris    |  6500.00 |
+| Hermann    | Baer      | 10000.00 |
+| Shelley    | Higgins   | 12000.00 |
++------------+-----------+----------+
+11 rows in set (0.006 sec) : without repeated values
+
+
+
+
+MariaDB [hr]> select first_name,last_name,job_title from employees,jobs where employees.job_id=jobs.job_id and department_id='20';
++------------+-----------+--------------------------+
+| first_name | last_name | job_title                |
++------------+-----------+--------------------------+
+| Michael    | Hartstein | Marketing Manager        |
+| Pat        | Fay       | Marketing Representative |
++------------+-----------+--------------------------+
+2 rows in set (0.001 sec)
+
+
+
+
+MariaDB [hr]>  SELECT first_name, last_name  FROM employees emp1 WHERE emp1.salary IN (SELECT MAX(salary) FROM employees emp2 WHERE emp1.job_id=emp2.job_id);
++------------+-----------+
+| first_name | last_name |
++------------+-----------+
+| Steven     | King      |
+| Neena      | Kochhar   |
+| Lex        | De Haan   |
+| Alexander  | Hunold    |
+| Nancy      | Greenberg |
+| Daniel     | Faviet    |
+| Den        | Raphaely  |
+| Alexander  | Khoo      |
+| Adam       | Fripp     |
+| Renske     | Ladwig    |
+| John       | Russell   |
+| Lisa       | Ozer      |
+| Nandita    | Sarchand  |
+| Jennifer   | Whalen    |
+| Michael    | Hartstein |
+| Pat        | Fay       |
+| Susan      | Mavris    |
+| Hermann    | Baer      |
+| Shelley    | Higgins   |
+| William    | Gietz     |
++------------+-----------+
+20 rows in set (0.003 sec)
+
+
+
+
+MariaDB [hr]> select concat(first_name,last_name) as name from employees where department_id=20 and job_id in (select job_id from employees where department_id=50) ;
++------------------+
+| name             |
++------------------+
+| MichaelHartstein |
++------------------+
+1 row in set (0.001 sec)
+
+
+
+
+MariaDB [hr]> select first_name,last_name,department_name from departments, employees where employees.department_id=departments.department_id and department_name='Finance';
++-------------+-----------+-----------------+
+| first_name  | last_name | department_name |
++-------------+-----------+-----------------+
+| Nancy       | Greenberg | Finance         |
+| Daniel      | Faviet    | Finance         |
+| John        | Chen      | Finance         |
+| Ismael      | Sciarra   | Finance         |
+| Jose Manuel | Urman     | Finance         |
+| Luis        | Popp      | Finance         |
++-------------+-----------+-----------------+
+6 rows in set (0.000 sec)
+
+
+
+
+MariaDB [hr]> select first_name,last_name from employees, departments, locations where departments.location_id=locations.location_id and employees.department_id=departments.department_id and city='Toronto';
++------------+-----------+
+| first_name | last_name |
++------------+-----------+
+| Michael    | Hartstein |
+| Pat        | Fay       |
++------------+-----------+
+2 rows in set (0.001 sec)
+
+
+
+
+MariaDB [hr]> select first_name, job_title, department_name from employees, departments, jobs where employees.job_id=jobs.job_id and employees.department_id=departments.department_id;
++-------------+---------------------------------+------------------+
+| first_name  | job_title                       | department_name  |
++-------------+---------------------------------+------------------+
+| William     | Public Accountant               | Accounting       |
+| Shelley     | Accounting Manager              | Accounting       |
+| Jennifer    | Administration Assistant        | Administration   |
+| Steven      | President                       | Executive        |
+| Neena       | Administration Vice President   | Executive        |
+| Lex         | Administration Vice President   | Executive        |
+| Daniel      | Accountant                      | Finance          |
+| John        | Accountant                      | Finance          |
+| Ismael      | Accountant                      | Finance          |
+| Jose Manuel | Accountant                      | Finance          |
+| Luis        | Accountant                      | Finance          |
+| Nancy       | Finance Manager                 | Finance          |
+| Susan       | Human Resources Representative  | Human Resources  |
+| Alexander   | Programmer                      | IT               |
+| Bruce       | Programmer                      | IT               |
+| David       | Programmer                      | IT               |
+| Valli       | Programmer                      | IT               |
+| Diana       | Programmer                      | IT               |
+| Shanta      | Marketing Manager               | Shipping         |
+| Michael     | Marketing Manager               | Marketing        |
+| Pat         | Marketing Representative        | Marketing        |
+| Hermann     | Public Relations Representative | Public Relations |
+| Alexander   | Purchasing Clerk                | Purchasing       |
+| Shelli      | Purchasing Clerk                | Purchasing       |
+| Sigal       | Purchasing Clerk                | Purchasing       |
+| Guy         | Purchasing Clerk                | Purchasing       |
+| Karen       | Purchasing Clerk                | Purchasing       |
+| Den         | Purchasing Manager              | Purchasing       |
+| John        | Sales Manager                   | Sales            |
+| Karen       | Sales Manager                   | Sales            |
+| Alberto     | Sales Manager                   | Sales            |
+| Gerald      | Sales Manager                   | Sales            |
+| Eleni       | Sales Manager                   | Sales            |
+| Peter       | Sales Representative            | Sales            |
+| David       | Sales Representative            | Sales            |
+| Peter       | Sales Representative            | Sales            |
+| Christopher | Sales Representative            | Sales            |
+| Nanette     | Sales Representative            | Sales            |
+| Oliver      | Sales Representative            | Sales            |
+| Janette     | Sales Representative            | Sales            |
+| Patrick     | Sales Representative            | Sales            |
+| Allan       | Sales Representative            | Sales            |
+| Lindsey     | Sales Representative            | Sales            |
+| Louise      | Sales Representative            | Sales            |
+| Sarath      | Sales Representative            | Sales            |
+| Clara       | Sales Representative            | Sales            |
+| Danielle    | Sales Representative            | Sales            |
+| Mattea      | Sales Representative            | Sales            |
+| David       | Sales Representative            | Sales            |
+| Sundar      | Sales Representative            | Sales            |
+| Amit        | Sales Representative            | Sales            |
+| Lisa        | Sales Representative            | Sales            |
+| Harrison    | Sales Representative            | Sales            |
+| Tayler      | Sales Representative            | Sales            |
+| William     | Sales Representative            | Sales            |
+| Elizabeth   | Sales Representative            | Sales            |
+| Sundita     | Sales Representative            | Sales            |
+| Ellen       | Sales Representative            | Sales            |
+| Alyssa      | Sales Representative            | Sales            |
+| Jonathon    | Sales Representative            | Sales            |
+| Jack        | Sales Representative            | Sales            |
+| Charles     | Sales Representative            | Sales            |
+| Winston     | Shipping Clerk                  | Shipping         |
+| Jean        | Shipping Clerk                  | Shipping         |
+| Martha      | Shipping Clerk                  | Shipping         |
+| Girard      | Shipping Clerk                  | Shipping         |
+| Nandita     | Shipping Clerk                  | Shipping         |
+| Alexis      | Shipping Clerk                  | Shipping         |
+| Julia       | Shipping Clerk                  | Shipping         |
+| Anthony     | Shipping Clerk                  | Shipping         |
+| Kelly       | Shipping Clerk                  | Shipping         |
+| Jennifer    | Shipping Clerk                  | Shipping         |
+| Timothy     | Shipping Clerk                  | Shipping         |
+| Randall     | Shipping Clerk                  | Shipping         |
+| Sarah       | Shipping Clerk                  | Shipping         |
+| Britney     | Shipping Clerk                  | Shipping         |
+| Samuel      | Shipping Clerk                  | Shipping         |
+| Vance       | Shipping Clerk                  | Shipping         |
+| Alana       | Shipping Clerk                  | Shipping         |
+| Kevin       | Shipping Clerk                  | Shipping         |
+| Donald      | Shipping Clerk                  | Shipping         |
+| Douglas     | Shipping Clerk                  | Shipping         |
+| Julia       | Stock Clerk                     | Shipping         |
+| Irene       | Stock Clerk                     | Shipping         |
+| James       | Stock Clerk                     | Shipping         |
+| Steven      | Stock Clerk                     | Shipping         |
+| Laura       | Stock Clerk                     | Shipping         |
+| Mozhe       | Stock Clerk                     | Shipping         |
+| James       | Stock Clerk                     | Shipping         |
+| TJ          | Stock Clerk                     | Shipping         |
+| Jason       | Stock Clerk                     | Shipping         |
+| Michael     | Stock Clerk                     | Shipping         |
+| Ki          | Stock Clerk                     | Shipping         |
+| Hazel       | Stock Clerk                     | Shipping         |
+| Renske      | Stock Clerk                     | Shipping         |
+| Stephen     | Stock Clerk                     | Shipping         |
+| John        | Stock Clerk                     | Shipping         |
+| Joshua      | Stock Clerk                     | Shipping         |
+| Trenna      | Stock Clerk                     | Shipping         |
+| Curtis      | Stock Clerk                     | Shipping         |
+| Randall     | Stock Clerk                     | Shipping         |
+| Peter       | Stock Clerk                     | Shipping         |
+| Matthew     | Stock Manager                   | Shipping         |
+| Adam        | Stock Manager                   | Shipping         |
+| Payam       | Stock Manager                   | Shipping         |
+| Kevin       | Stock Manager                   | Shipping         |
++-------------+---------------------------------+------------------+
+106 rows in set (0.001 sec)
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+Query 16)
+
+Query Solution
+MariaDB [hr]> SELECT department_name , COUNT(*) AS 'No of Employees' FROM departments INNER JOIN employees ON employees.department_id = department_name;
++-----------------+-----------------+
+| department_name | No of Employees |
++-----------------+-----------------+
+| NULL            |               0 |
++-----------------+-----------------+
+1 row in set, 27 warnings (0.001 sec)
+
+
+
+MariaDB [hr]> select first_name, last_name, departments.department_id, department_name from employees, departments where employees.department_id=departments.department_id order by last_name;
++-------------+-------------+---------------+------------------+
+| first_name  | last_name   | department_id | department_name  |
++-------------+-------------+---------------+------------------+
+| Ellen       | Abel        |            80 | Sales            |
+| Sundar      | Ande        |            80 | Sales            |
+| Mozhe       | Atkinson    |            50 | Shipping         |
+| David       | Austin      |            60 | IT               |
+| Hermann     | Baer        |            70 | Public Relations |
+| Shelli      | Baida       |            30 | Purchasing       |
+| Amit        | Banda       |            80 | Sales            |
+| Elizabeth   | Bates       |            80 | Sales            |
+| Sarah       | Bell        |            50 | Shipping         |
+| David       | Bernstein   |            80 | Sales            |
+| Laura       | Bissot      |            50 | Shipping         |
+| Harrison    | Bloom       |            80 | Sales            |
+| Alexis      | Bull        |            50 | Shipping         |
+| Anthony     | Cabrio      |            50 | Shipping         |
+| Nanette     | Cambrault   |            80 | Sales            |
+| Gerald      | Cambrault   |            80 | Sales            |
+| John        | Chen        |           100 | Finance          |
+| Kelly       | Chung       |            50 | Shipping         |
+| Karen       | Colmenares  |            30 | Purchasing       |
+| Curtis      | Davies      |            50 | Shipping         |
+| Lex         | De Haan     |            90 | Executive        |
+| Julia       | Dellinger   |            50 | Shipping         |
+| Jennifer    | Dilly       |            50 | Shipping         |
+| Louise      | Doran       |            80 | Sales            |
+| Bruce       | Ernst       |            60 | IT               |
+| Alberto     | Errazuriz   |            80 | Sales            |
+| Britney     | Everett     |            50 | Shipping         |
+| Daniel      | Faviet      |           100 | Finance          |
+| Pat         | Fay         |            20 | Marketing        |
+| Kevin       | Feeney      |            50 | Shipping         |
+| Jean        | Fleaur      |            50 | Shipping         |
+| Tayler      | Fox         |            80 | Sales            |
+| Adam        | Fripp       |            50 | Shipping         |
+| Timothy     | Gates       |            50 | Shipping         |
+| Ki          | Gee         |            50 | Shipping         |
+| Girard      | Geoni       |            50 | Shipping         |
+| William     | Gietz       |           110 | Accounting       |
+| Douglas     | Grant       |            50 | Shipping         |
+| Nancy       | Greenberg   |           100 | Finance          |
+| Danielle    | Greene      |            80 | Sales            |
+| Peter       | Hall        |            80 | Sales            |
+| Michael     | Hartstein   |            20 | Marketing        |
+| Shelley     | Higgins     |           110 | Accounting       |
+| Guy         | Himuro      |            30 | Purchasing       |
+| Alexander   | Hunold      |            60 | IT               |
+| Alyssa      | Hutton      |            80 | Sales            |
+| Charles     | Johnson     |            80 | Sales            |
+| Vance       | Jones       |            50 | Shipping         |
+| Payam       | Kaufling    |            50 | Shipping         |
+| Alexander   | Khoo        |            30 | Purchasing       |
+| Janette     | King        |            80 | Sales            |
+| Steven      | King        |            90 | Executive        |
+| Neena       | Kochhar     |            90 | Executive        |
+| Sundita     | Kumar       |            80 | Sales            |
+| Renske      | Ladwig      |            50 | Shipping         |
+| James       | Landry      |            50 | Shipping         |
+| David       | Lee         |            80 | Sales            |
+| Jack        | Livingston  |            80 | Sales            |
+| Diana       | Lorentz     |            60 | IT               |
+| Jason       | Mallin      |            50 | Shipping         |
+| Steven      | Markle      |            50 | Shipping         |
+| James       | Marlow      |            50 | Shipping         |
+| Mattea      | Marvins     |            80 | Sales            |
+| Randall     | Matos       |            50 | Shipping         |
+| Susan       | Mavris      |            40 | Human Resources  |
+| Samuel      | McCain      |            50 | Shipping         |
+| Allan       | McEwen      |            80 | Sales            |
+| Irene       | Mikkilineni |            50 | Shipping         |
+| Kevin       | Mourgos     |            50 | Shipping         |
+| Julia       | Nayer       |            50 | Shipping         |
+| Donald      | OConnell    |            50 | Shipping         |
+| Christopher | Olsen       |            80 | Sales            |
+| TJ          | Olson       |            50 | Shipping         |
+| Lisa        | Ozer        |            80 | Sales            |
+| Karen       | Partners    |            80 | Sales            |
+| Valli       | Pataballa   |            60 | IT               |
+| Joshua      | Patel       |            50 | Shipping         |
+| Randall     | Perkins     |            50 | Shipping         |
+| Hazel       | Philtanker  |            50 | Shipping         |
+| Luis        | Popp        |           100 | Finance          |
+| Trenna      | Rajs        |            50 | Shipping         |
+| Den         | Raphaely    |            30 | Purchasing       |
+| Michael     | Rogers      |            50 | Shipping         |
+| John        | Russell     |            80 | Sales            |
+| Nandita     | Sarchand    |            50 | Shipping         |
+| Ismael      | Sciarra     |           100 | Finance          |
+| John        | Seo         |            50 | Shipping         |
+| Sarath      | Sewall      |            80 | Sales            |
+| Lindsey     | Smith       |            80 | Sales            |
+| William     | Smith       |            80 | Sales            |
+| Stephen     | Stiles      |            50 | Shipping         |
+| Martha      | Sullivan    |            50 | Shipping         |
+| Patrick     | Sully       |            80 | Sales            |
+| Winston     | Taylor      |            50 | Shipping         |
+| Jonathon    | Taylor      |            80 | Sales            |
+| Sigal       | Tobias      |            30 | Purchasing       |
+| Peter       | Tucker      |            80 | Sales            |
+| Oliver      | Tuvault     |            80 | Sales            |
+| Jose Manuel | Urman       |           100 | Finance          |
+| Peter       | Vargas      |            50 | Shipping         |
+| Clara       | Vishney     |            80 | Sales            |
+| Shanta      | Vollman     |            50 | Shipping         |
+| Alana       | Walsh       |            50 | Shipping         |
+| Matthew     | Weiss       |            50 | Shipping         |
+| Jennifer    | Whalen      |            10 | Administration   |
+| Eleni       | Zlotkey     |            80 | Sales            |
++-------------+-------------+---------------+------------------+
+106 rows in set (0.001 sec)
+
+
+
+
+MariaDB [hr]> SELECT first_name, job_title, department_name, city, country_name, region_name from employees, departments, jobs, locations, countries, regions where employees.department_id=departments.department_id and employees.job_id=jobs.job_id and departments.location_id=locations.location_id and countries.region_id=regions.region_id and locations.country_id=countries.country_id ;
++-------------+---------------------------------+------------------+---------------------+--------------------------+-------------+
+| first_name  | job_title                       | department_name  | city                | country_name             | region_name |
++-------------+---------------------------------+------------------+---------------------+--------------------------+-------------+
+| Hermann     | Public Relations Representative | Public Relations | Munich              | Germany                  | Europe      |
+| Susan       | Human Resources Representative  | Human Resources  | London              | United Kingdom           | Europe      |
+| John        | Sales Manager                   | Sales            | Oxford              | United Kingdom           | Europe      |
+| Karen       | Sales Manager                   | Sales            | Oxford              | United Kingdom           | Europe      |
+| Alberto     | Sales Manager                   | Sales            | Oxford              | United Kingdom           | Europe      |
+| Gerald      | Sales Manager                   | Sales            | Oxford              | United Kingdom           | Europe      |
+| Eleni       | Sales Manager                   | Sales            | Oxford              | United Kingdom           | Europe      |
+| Peter       | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| David       | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Peter       | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Christopher | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Nanette     | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Oliver      | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Janette     | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Patrick     | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Allan       | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Lindsey     | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Louise      | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Sarath      | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Clara       | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Danielle    | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Mattea      | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| David       | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Sundar      | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Amit        | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Lisa        | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Harrison    | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Tayler      | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| William     | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Elizabeth   | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Sundita     | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Ellen       | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Alyssa      | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Jonathon    | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Jack        | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Charles     | Sales Representative            | Sales            | Oxford              | United Kingdom           | Europe      |
+| Michael     | Marketing Manager               | Marketing        | Toronto             | Canada                   | Americas    |
+| Pat         | Marketing Representative        | Marketing        | Toronto             | Canada                   | Americas    |
+| Alexander   | Programmer                      | IT               | Southlake           | United States of America | Americas    |
+| Bruce       | Programmer                      | IT               | Southlake           | United States of America | Americas    |
+| David       | Programmer                      | IT               | Southlake           | United States of America | Americas    |
+| Valli       | Programmer                      | IT               | Southlake           | United States of America | Americas    |
+| Diana       | Programmer                      | IT               | Southlake           | United States of America | Americas    |
+| Matthew     | Stock Manager                   | Shipping         | South San Francisco | United States of America | Americas    |
+| Adam        | Stock Manager                   | Shipping         | South San Francisco | United States of America | Americas    |
+| Payam       | Stock Manager                   | Shipping         | South San Francisco | United States of America | Americas    |
+| Shanta      | Marketing Manager               | Shipping         | South San Francisco | United States of America | Americas    |
+| Kevin       | Stock Manager                   | Shipping         | South San Francisco | United States of America | Americas    |
+| Julia       | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Irene       | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| James       | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Steven      | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Laura       | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Mozhe       | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| James       | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| TJ          | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Jason       | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Michael     | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Ki          | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Hazel       | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Renske      | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Stephen     | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| John        | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Joshua      | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Trenna      | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Curtis      | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Randall     | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Peter       | Stock Clerk                     | Shipping         | South San Francisco | United States of America | Americas    |
+| Winston     | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Jean        | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Martha      | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Girard      | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Nandita     | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Alexis      | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Julia       | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Anthony     | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Kelly       | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Jennifer    | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Timothy     | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Randall     | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Sarah       | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Britney     | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Samuel      | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Vance       | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Alana       | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Kevin       | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Donald      | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Douglas     | Shipping Clerk                  | Shipping         | South San Francisco | United States of America | Americas    |
+| Jennifer    | Administration Assistant        | Administration   | Seattle             | United States of America | Americas    |
+| Den         | Purchasing Manager              | Purchasing       | Seattle             | United States of America | Americas    |
+| Alexander   | Purchasing Clerk                | Purchasing       | Seattle             | United States of America | Americas    |
+| Shelli      | Purchasing Clerk                | Purchasing       | Seattle             | United States of America | Americas    |
+| Sigal       | Purchasing Clerk                | Purchasing       | Seattle             | United States of America | Americas    |
+| Guy         | Purchasing Clerk                | Purchasing       | Seattle             | United States of America | Americas    |
+| Karen       | Purchasing Clerk                | Purchasing       | Seattle             | United States of America | Americas    |
+| Steven      | President                       | Executive        | Seattle             | United States of America | Americas    |
+| Neena       | Administration Vice President   | Executive        | Seattle             | United States of America | Americas    |
+| Lex         | Administration Vice President   | Executive        | Seattle             | United States of America | Americas    |
+| Nancy       | Finance Manager                 | Finance          | Seattle             | United States of America | Americas    |
+| Daniel      | Accountant                      | Finance          | Seattle             | United States of America | Americas    |
+| John        | Accountant                      | Finance          | Seattle             | United States of America | Americas    |
+| Ismael      | Accountant                      | Finance          | Seattle             | United States of America | Americas    |
+| Jose Manuel | Accountant                      | Finance          | Seattle             | United States of America | Americas    |
+| Luis        | Accountant                      | Finance          | Seattle             | United States of America | Americas    |
+| Shelley     | Accounting Manager              | Accounting       | Seattle             | United States of America | Americas    |
+| William     | Public Accountant               | Accounting       | Seattle             | United States of America | Americas    |
++-------------+---------------------------------+------------------+---------------------+--------------------------+-------------+
+106 rows in set (0.001 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
